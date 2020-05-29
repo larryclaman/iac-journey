@@ -22,6 +22,9 @@ resource "random_string" "password" {
 resource "azurerm_resource_group" "main" {
   name     = "${var.siteName}-${random_string.random.id}-rg"
   location = "eastus"
+  lifecycle {
+    ignore_changes = [tags, ]
+  }
 }
 
 resource "azurerm_app_service_plan" "appservice" {
