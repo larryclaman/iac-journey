@@ -40,6 +40,13 @@ steps:
     workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
     environmentServiceNameAzureRM: 'EXP-QA-Terraform-DevOps'
 
+- task: TerraformTaskV1@0
+  displayName: 'Terraform Output'
+  inputs:
+    provider: 'azurerm'
+    command: 'output'
+    workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
+    environmentServiceNameAzureRM: 'EXP-QA-Terraform-DevOps'
 
 - task: CmdLine@2
   inputs:
