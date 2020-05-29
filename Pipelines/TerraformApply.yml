@@ -15,6 +15,7 @@ steps:
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/Terraform'
 - task: TerraformTaskV1@0
+  displayName: 'Terraform Init'
   inputs:
     provider: 'azurerm'
     command: 'init'
@@ -25,12 +26,14 @@ steps:
     backendAzureRmContainerName: 'terraformstate'
     backendAzureRmKey: 'terraform.tfstate'
 - task: TerraformTaskV1@0
+  displayName: 'Terraform Plan'
   inputs:
     provider: 'azurerm'
     command: 'plan'
     workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
     environmentServiceNameAzureRM: 'EXP-QA-Terraform-DevOps'
 - task: TerraformTaskV1@0
+  displayName: 'Terraform Apply'
   inputs:
     provider: 'azurerm'
     command: 'apply'
