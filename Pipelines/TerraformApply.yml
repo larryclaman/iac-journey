@@ -36,3 +36,12 @@ steps:
     command: 'apply'
     workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
     environmentServiceNameAzureRM: 'EXP-QA-Terraform-DevOps'
+
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      ls -l
+      terraform output
+    workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
+
