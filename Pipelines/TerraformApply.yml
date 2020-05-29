@@ -31,27 +31,18 @@ steps:
     provider: 'azurerm'
     command: 'plan'
     workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
-    environmentServiceNameAzureRM: 'EXP-QA-Terraform-DevOps'
+#    environmentServiceNameAzureRM: 'EXP-QA-Terraform-DevOps'
 - task: TerraformTaskV1@0
   displayName: 'Terraform Apply'
   inputs:
     provider: 'azurerm'
     command: 'apply'
     workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
-    environmentServiceNameAzureRM: 'EXP-QA-Terraform-DevOps'
-
-- task: TerraformTaskV1@0
-  displayName: 'Terraform Output'
-  inputs:
-    provider: 'azurerm'
-    command: 'output'
-    workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
-    environmentServiceNameAzureRM: 'EXP-QA-Terraform-DevOps'
+#    environmentServiceNameAzureRM: 'EXP-QA-Terraform-DevOps'
 
 - task: CmdLine@2
+  displayName: 'Terraform Output'
   inputs:
-    script: |
-      ls -l
-      terraform output
+    script: terraform output
     workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
 
