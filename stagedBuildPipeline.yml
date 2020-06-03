@@ -72,6 +72,6 @@ stages:
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact'
       inputs:
-        PathtoPublish: '$(Build.ArtifactsStagingDirectory)/web'
+        PathtoPublish: '$(Build.ArtifactsStagingDirectory)'
         ArtifactName: 'TailspinToys-CI'
       condition: succeededOrFailed()
