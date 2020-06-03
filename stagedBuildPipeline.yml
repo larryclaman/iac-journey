@@ -1,0 +1,77 @@
+# Staged Pipeline to deploy the PaaS Lab using environment variables
+# Intention is to create 3 separate environments
+
+trigger:
+  branches:
+    include:
+    - PaaSlab
+  paths:
+    include:
+    - terraform
+    - TailspinToys
+
+stages:
+- stage: 'Build'
+  displayName: 'Build and Stage artifacts'
+
+  jobs:
+  - job: 'Stage'
+    displayName: 'Stage Terraform artifacts'
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    steps:
+    - task: TerraformInstaller@0
+      inputs:
+        terraformVersion: '0.12.24'
+      displayName: 'Install Terraform 0.12.24'
+    - task: CopyFiles@1
+      displayName: 'Copy terraform files to working directory'
+      inputs:
+        SourceFolder: 'terraform'
+        Contents: "*"
+        TargetFolder: '$(Build.ArtifactsStagingDirectory)/terraform'
+    
+  - job: 'Build'
+    displayName: 'Build'
+    pool:
+      vmImage: 'windows-latest'
+      demands:
+      - msbuild
+      - visualstudio
+      - vstest
+    
+    variables:
+      buildConfiguration: 'Release'
+    
+    steps:
+    - task: NuGetToolInstaller@0
+      displayName: 'Use NuGet 4.4.1'
+      inputs:
+        versionSpec: 4.4.1
+    - task: NuGetCommand@2
+      displayName: 'NuGet Restore'
+      inputs:
+        restoreSolution: '/TailspinToys/tailspintoysweb.csproj'
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '10.x'
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: '/TailspinToys/tailspintoysweb.csproj'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
+        platform: 'any cpu'
+        configuration: 'release'
+    - task: PublishSymbols@2
+      displayName: 'Publish symbols path'
+      inputs:
+        SearchPattern: '**\bin**\*.pdb'
+        PublishSymbols: false
+      continueOnError: false
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactsStagingDirectory)/web'
+        ArtifactName: 'TailspinToys-CI'
+      condition: succeededOrFailed()
