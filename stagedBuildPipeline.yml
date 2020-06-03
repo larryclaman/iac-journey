@@ -2,7 +2,13 @@
 # Intention is to create 3 separate environments
 
 trigger:
-- PaaSlab
+  branches:
+    include:
+    - PaaSlab
+  paths:
+    include:
+    - terraform
+    - TailspinToys
 
 stages:
 - stage: 'Build'
