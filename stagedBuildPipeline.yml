@@ -1,8 +1,8 @@
 # Staged Pipeline to deploy the PaaS Lab using environment variables
 # Intention is to create 3 separate environments
 
-# trigger:
-# - PaaSlab
+trigger:
+- PaaSlab
 
 stages:
 - stage: 'Build'
