@@ -10,11 +10,13 @@ steps:
     terraformVersion: '0.12.24'
   displayName: 'Install Terraform 0.12.24'
 - task: CopyFiles@2
+  displayName: 'Copy terraform files to working directory'
   inputs:
     SourceFolder: 'terraform'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/Terraform'
 - task: TerraformTaskV1@0
+  displayName: 'Terraform Init'
   inputs:
     provider: 'azurerm'
     command: 'init'
@@ -25,14 +27,23 @@ steps:
     backendAzureRmContainerName: 'terraformstate'
     backendAzureRmKey: 'terraform.tfstate'
 - task: TerraformTaskV1@0
+  displayName: 'Terraform Plan'
   inputs:
     provider: 'azurerm'
     command: 'plan'
     workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
     environmentServiceNameAzureRM: 'EXP-QA-Terraform-DevOps'
 - task: TerraformTaskV1@0
+  displayName: 'Terraform Apply'
   inputs:
     provider: 'azurerm'
     command: 'apply'
     workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
     environmentServiceNameAzureRM: 'EXP-QA-Terraform-DevOps'
+
+- task: CmdLine@2
+  displayName: 'Terraform Output'
+  inputs:
+    script: terraform output
+    workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
+
