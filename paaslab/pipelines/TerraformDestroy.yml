@@ -25,10 +25,10 @@ steps:
     command: 'init'
     workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
     backendServiceArm: ${{ variables.ServiceName }}  
-    backendAzureRmResourceGroupName: 'EXP-QA-Terraform-DevOps'
-    backendAzureRmStorageAccountName: 'expqatformlabstore'
-    backendAzureRmContainerName: 'terraformstate'
-    backendAzureRmKey: 'terraform.tfstate'
+    backendAzureRmResourceGroupName: ${{ variables.backendAzureRmResourceGroupName }}
+    backendAzureRmStorageAccountName: ${{ variables.backendAzureRmStorageAccountName }}
+    backendAzureRmContainerName: ${{ variables.backendAzureRmContainerName }}
+    backendAzureRmKey: ${{ variables.backendAzureRmKey }}
 - task: TerraformTaskV1@0
   displayName: 'Terraform Destroy'
   inputs:
