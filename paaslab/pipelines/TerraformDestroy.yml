@@ -1,4 +1,4 @@
-trigger:
+# No trigger
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -12,12 +12,14 @@ steps:
   inputs:
     terraformVersion: '0.12.24'
   displayName: 'Install Terraform 0.12.24'
+
 - task: CopyFiles@2
   displayName: 'Copy terraform files to working directory'
   inputs:
-    SourceFolder: 'terraform'
+    SourceFolder: 'paaslab/terraform'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/Terraform'
+
 - task: TerraformTaskV1@0
   displayName: 'Terraform Init'
   inputs:
@@ -29,6 +31,7 @@ steps:
     backendAzureRmStorageAccountName: ${{ variables.backendAzureRmStorageAccountName }}
     backendAzureRmContainerName: ${{ variables.backendAzureRmContainerName }}
     backendAzureRmKey: ${{ variables.backendAzureRmKey }}
+    
 - task: TerraformTaskV1@0
   displayName: 'Terraform Destroy'
   inputs:

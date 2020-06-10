@@ -1,4 +1,4 @@
-trigger:
+# No trigger
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -16,7 +16,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy terraform files to working directory'
   inputs:
-    SourceFolder: 'terraform'
+    SourceFolder: 'paaslab/terraform'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/Terraform'
 
