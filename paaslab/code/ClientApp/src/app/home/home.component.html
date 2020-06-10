@@ -1,0 +1,24 @@
+<h1>Welcome to Tailspin Toys v1!</h1>
+
+<p>Current inventory:</p>
+
+<p *ngIf="!products"><em>Loading...</em></p>
+
+<table class='table table-striped' *ngIf="products">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Quantity</th>
+      <th>Title</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of products">
+      <td>{{ product.id }}</td>
+      <td>{{ product.quantity }}</td>
+      <td>{{ product.title }}</td>
+      <td>{{ product.description }}</td>
+    </tr>
+  </tbody>
+</table>
