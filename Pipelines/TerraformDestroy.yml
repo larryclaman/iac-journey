@@ -4,6 +4,10 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+# All variables are set in vars.yml, so they can be used across pipelines.
+variables:
+- template: vars.yml
+
 steps:
 - task: TerraformInstaller@0
   inputs:
@@ -21,7 +25,7 @@ steps:
     provider: 'azurerm'
     command: 'init'
     workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
-    backendServiceArm: 'EXP-QA-Terraform-DevOps'
+    backendServiceArm: ${{ variables.ServiceName }}  
     backendAzureRmResourceGroupName: 'EXP-QA-Terraform-DevOps'
     backendAzureRmStorageAccountName: 'expqatformlabstore'
     backendAzureRmContainerName: 'terraformstate'
@@ -32,4 +36,4 @@ steps:
     provider: 'azurerm'
     command: 'destroy'
     workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
-    environmentServiceNameAzureRM: 'EXP-QA-Terraform-DevOps'
+    environmentServiceNameAzureRM: ${{ variables.ServiceName }}  

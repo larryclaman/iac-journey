@@ -1,0 +1,8 @@
+# vars.yml
+variables:
+  ServiceName: 'EXP-QA-Terraform-DevOps'
+  # terraform backend variables:
+  backendAzureRmResourceGroupName: 'EXP-QA-Terraform-DevOps'
+  backendAzureRmStorageAccountName: 'expqatformlabstore'
+  backendAzureRmContainerName: 'terraformstate'
+  backendAzureRmKey: 'terraform.tfstate'
