@@ -88,16 +88,15 @@ resource "azurerm_postgresql_server" "postgres" {
 
   sku_name = "GP_Gen5_2"
 
-  storage_profile {
-    storage_mb            = 5120
-    backup_retention_days = 7
-    geo_redundant_backup  = "Disabled"
-  }
+  storage_mb                   = 5120
+  backup_retention_days        = 7
+  geo_redundant_backup_enabled = false
 
+  
   administrator_login          = "pgsqladmin"
   administrator_login_password = random_string.password[count.index].result
   version                      = "9.6"
-  ssl_enforcement              = "Enabled"
+  ssl_enforcement_enabled      = "true"
 
   lifecycle {
     ignore_changes = [tags, ]
