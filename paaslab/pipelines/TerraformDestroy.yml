@@ -1,5 +1,4 @@
 trigger:
-- PaaSlab
 
 pool:
   vmImage: 'ubuntu-latest'
