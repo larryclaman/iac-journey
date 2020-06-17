@@ -17,56 +17,56 @@ stages:
       vmImage: 'ubuntu-latest'
 
     steps:
-    - checkout: self
-      fetchDepth: 1
+      - checkout: self
+        fetchDepth: 1
 
-    - task: TerraformInstaller@0
-      inputs:
-        terraformVersion: '0.12.26'
-      displayName: 'Install Terraform 0.12.26'
+      - task: TerraformInstaller@0
+        inputs:
+          terraformVersion: '0.12.26'
+        displayName: 'Install Terraform 0.12.26'
 
-    - task: CopyFiles@2
-      displayName: 'Copy terraform files to working directory'
-      inputs:
-        SourceFolder: 'paaslab/terraform'
-        Contents: '**'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/Terraform'
+      - task: CopyFiles@2
+        displayName: 'Copy terraform files to working directory'
+        inputs:
+          SourceFolder: 'paaslab/terraform'
+          Contents: '**'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)/Terraform'
 
-    - task: TerraformTaskV1@0
-      displayName: 'Terraform Init'
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
-        backendServiceArm: ${{ variables.ServiceName }}
-        backendAzureRmResourceGroupName: ${{ variables.backendAzureRmResourceGroupName }}
-        backendAzureRmStorageAccountName: ${{ variables.backendAzureRmStorageAccountName }}
-        backendAzureRmContainerName: ${{ variables.backendAzureRmContainerName }}
-        backendAzureRmKey: ${{ variables.backendAzureRmKey }}
+      - task: TerraformTaskV1@0
+        displayName: 'Terraform Init'
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
+          backendServiceArm: ${{ variables.ServiceName }}
+          backendAzureRmResourceGroupName: ${{ variables.backendAzureRmResourceGroupName }}
+          backendAzureRmStorageAccountName: ${{ variables.backendAzureRmStorageAccountName }}
+          backendAzureRmContainerName: ${{ variables.backendAzureRmContainerName }}
+          backendAzureRmKey: ${{ variables.backendAzureRmKey }}
 
-    - task: TerraformTaskV1@0
-      displayName: 'Terraform Plan'
-      inputs:
-        provider: 'azurerm'
-        command: 'plan'
-        workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
-        commandOptions: '-out=${BUILD_BUILDNUMBER}.tfplan'
-        environmentServiceNameAzureRM: '${{ variables.ServiceName }}'
+      - task: TerraformTaskV1@0
+        displayName: 'Terraform Plan'
+        inputs:
+          provider: 'azurerm'
+          command: 'plan'
+          workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
+          commandOptions: '-out=${BUILD_BUILDNUMBER}.tfplan'
+          environmentServiceNameAzureRM: '${{ variables.ServiceName }}'
 
-#    - task: ArchiveFiles@2
-#      inputs:
-#        rootFolderOrFile: '$(Build.SourcesDirectory)'
-#        includeRootFolder: false
-#        archiveType: 'tar'
-#        tarCompression: 'gz'
-#        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tgz'
-#        replaceExistingArchive: true
-#      displayName: 'Create Plan Artifact'
+  #    - task: ArchiveFiles@2
+  #      inputs:
+  #        rootFolderOrFile: '$(Build.SourcesDirectory)'
+  #        includeRootFolder: false
+  #        archiveType: 'tar'
+  #        tarCompression: 'gz'
+  #        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tgz'
+  #        replaceExistingArchive: true
+  #      displayName: 'Create Plan Artifact'
 
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'drop'
-        publishLocation: 'Container'
-      displayName: 'Publish Plan Artifact'
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'drop'
+          publishLocation: 'Container'
+        displayName: 'Publish Plan Artifact'
 
