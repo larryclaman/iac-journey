@@ -36,7 +36,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
-              workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
+              workingDirectory: 'paaslab/terraform'
               backendServiceArm: ${{ variables.ServiceName }}
               backendAzureRmResourceGroupName: ${{ variables.backendAzureRmResourceGroupName }}
               backendAzureRmStorageAccountName: ${{ variables.backendAzureRmStorageAccountName }}
@@ -48,7 +48,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'plan'
-              workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
+              workingDirectory: 'paaslab/terraform'
               commandOptions: '-out=$(BUILD_BUILDNUMBER).tfplan'
               environmentServiceNameAzureRM: '${{ variables.ServiceName }}'
 
