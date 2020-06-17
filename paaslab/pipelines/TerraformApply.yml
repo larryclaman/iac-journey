@@ -49,7 +49,7 @@ stages:
               provider: 'azurerm'
               command: 'plan'
               workingDirectory: 'paaslab/terraform'
-              commandOptions: '-out=$(BUILD_BUILDNUMBER).tfplan'
+              commandOptions: '-out $(BUILD_BUILDNUMBER).tfplan'
               environmentServiceNameAzureRM: '${{ variables.ServiceName }}'
 
           - task: ArchiveFiles@2
