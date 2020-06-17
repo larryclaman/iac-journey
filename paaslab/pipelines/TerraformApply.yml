@@ -11,6 +11,7 @@ stages:
   - stage: BuildPlan
     jobs:
       - job: BuildPlan
+        displayName: 'Build and Plan infrastructure'  
 
     pool:
       vmImage: 'ubuntu-latest'
@@ -49,19 +50,51 @@ stages:
         provider: 'azurerm'
         command: 'plan'
         workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
-        environmentServiceNameAzureRM: ${{ variables.ServiceName }}
+        commandOptions: '-out=${BUILD_BUILDNUMBER}.tfplan'
+        environmentServiceNameAzureRM: '${{ variables.ServiceName }}'
 
-    - task: TerraformTaskV1@0
-      displayName: 'Terraform Apply'
-      inputs:
-        provider: 'azurerm'
-        command: 'apply'
-        workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
-        environmentServiceNameAzureRM: ${{ variables.ServiceName }}
+#    - task: ArchiveFiles@2
+#      inputs:
+#        rootFolderOrFile: '$(Build.SourcesDirectory)'
+#        includeRootFolder: false
+#        archiveType: 'tar'
+#        tarCompression: 'gz'
+#        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tgz'
+#        replaceExistingArchive: true
+#      displayName: 'Create Plan Artifact'
 
-    - task: CmdLine@2
-      displayName: 'Terraform Output'
+    - task: PublishBuildArtifacts@1
       inputs:
-        script: terraform output
-        workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+      displayName: 'Publish Plan Artifact'
+
+
+  - stage: Deploy
+      jobs:
+        - deployment: Deploy
+          displayName: 'Deploy infrastructure'
+          pool:
+            vmImage: 'ubuntu-latest'
+          environment: EXPpaas
+          strategy:
+            runOnce:
+              deploy:
+                steps:
+                  - checkout: none
+
+                  - task: TerraformTaskV1@0
+                    displayName: 'Terraform Apply'
+                    inputs:
+                      provider: 'azurerm'
+                      command: 'apply'
+                      workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
+                      environmentServiceNameAzureRM: ${{ variables.ServiceName }}
+
+                  - task: CmdLine@2
+                    displayName: 'Terraform Output'
+                    inputs:
+                      script: terraform output
+                      workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
 
