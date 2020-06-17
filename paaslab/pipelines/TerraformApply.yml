@@ -23,12 +23,13 @@ stages:
               terraformVersion: '0.12.26'
             displayName: 'Install Terraform 0.12.26'
 
-          - task: CopyFiles@2
-            displayName: 'Copy terraform files to working directory'
-            inputs:
-              SourceFolder: 'paaslab/terraform'
-              Contents: '**'
-              TargetFolder: '$(Build.ArtifactStagingDirectory)/Terraform'
+# working dir should be paaslab/terraform
+#          - task: CopyFiles@2
+#            displayName: 'Copy terraform files to working directory'
+#            inputs:
+#              SourceFolder: 'paaslab/terraform'
+#              Contents: '**'
+#              TargetFolder: '$(Build.ArtifactStagingDirectory)/Terraform'
 
           - task: TerraformTaskV1@0
             displayName: 'Terraform Init'
@@ -48,18 +49,18 @@ stages:
               provider: 'azurerm'
               command: 'plan'
               workingDirectory: '$(Build.ArtifactStagingDirectory)/Terraform'
-              commandOptions: '-out=${BUILD_BUILDNUMBER}.tfplan'
+              commandOptions: '-out=$(BUILD_BUILDNUMBER).tfplan'
               environmentServiceNameAzureRM: '${{ variables.ServiceName }}'
 
-      #    - task: ArchiveFiles@2
-      #      inputs:
-      #        rootFolderOrFile: '$(Build.SourcesDirectory)'
-      #        includeRootFolder: false
-      #        archiveType: 'tar'
-      #        tarCompression: 'gz'
-      #        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tgz'
-      #        replaceExistingArchive: true
-      #      displayName: 'Create Plan Artifact'
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: 'paaslab/terraform'
+              includeRootFolder: false
+              archiveType: 'tar'
+              tarCompression: 'gz'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tgz'
+              replaceExistingArchive: true
+            displayName: 'Create Plan Artifact'
 
           - task: PublishBuildArtifacts@1
             inputs:
