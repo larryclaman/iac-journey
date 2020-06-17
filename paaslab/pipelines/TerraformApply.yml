@@ -111,5 +111,5 @@ stages:
                   displayName: 'Terraform Output'
                   inputs:
                     script: terraform output
-                    workingDirectory: $(System.DefaultWorkingDirectory)'
+                    workingDirectory: '$(System.DefaultWorkingDirectory)'
 
