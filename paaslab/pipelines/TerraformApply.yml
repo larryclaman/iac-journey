@@ -104,4 +104,3 @@ stages:
                   inputs:
                     script: terraform output
                     workingDirectory: '$(System.DefaultWorkingDirectory)'
-

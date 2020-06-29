@@ -1,0 +1,162 @@
+# No trigger
+
+# All variables are set in vars.yml, so they can be used across pipelines
+variables:
+- template: vars.yml
+
+# multi-stage pipeline - builds web artifacts first
+stages:
+  - stage: buildAndTest
+    jobs:
+      - job: buildSolution 
+        displayName: 'Build TailspinToys web solution'
+        pool:
+          vmImage: 'windows-latest'
+          demands:
+          - msbuild
+          - visualstudio
+          - vstest
+        steps:
+          - task: NuGetToolInstaller@0
+            displayName: 'Use NuGet 4.4.1'
+            inputs:
+              versionSpec: 4.4.1
+          
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '10.x'
+          
+          - task: NuGetCommand@2
+            displayName: 'NuGet restore'
+            inputs:
+              restoreSolution: '**/tailspintoysweb.csproj'
+          
+          - task: VSBuild@1
+            displayName: 'Build solution'
+            inputs:
+              solution: '**/tailspintoysweb.csproj'
+              msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
+              platform: 'any cpu'
+              configuration: 'release'
+            
+          - task: PublishSymbols@2
+            displayName: 'Publish symbols path'
+            inputs:
+              SearchPattern: '**\bin\**\*.pdb'
+              PublishSymbols: false
+            continueOnError: true
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifacts'
+            inputs:
+              PathtoPublish: '$(build.artifactstagingdirectory)'
+              ArtifactName: 'TailspinToys-CI'
+            condition: succeededOrFailed()
+
+      - job: testSolution
+        displayName: 'Deploy TailspinToys to Dev'
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              artifactName: 'TailspinToys-CI'
+            displayName: 'Download Solution'
+
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'EXP-QA-Terraform-DevOps'
+              appType: 'webApp'
+              WebAppName: 'tailspintoys-paaslab-0-site'
+              deployToSlotOrASE: true
+              ResourceGroupName: 'tailspintoys-paaslab-rg'
+              SlotName: 'staging'
+              packageForLinux: '$(build.artifactstagingdirectory)/**/*.zip'
+          
+          - task: AzureAppServiceManage@0
+            inputs:
+              azureSubscription: 'EXP-QA-Terraform-DevOps'
+              Action: 'Swap Slots'
+              WebAppName: 'tailspintoys-paaslab-0-site'
+              ResourceGroupName: 'tailspintoys-paaslab-rg'
+              SourceSlot: 'staging'
+
+#### Deployment Stage ####
+  - stage: DeploySolution
+    jobs:
+      - deployment: deployToTest
+        displayName: 'Deploy Test Site'
+        pool:
+          vmImage: 'windows-latest'
+        environment: EXP-PaaS
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: none
+
+                - task: DownloadBuildArtifacts@0
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'TailspinToys-CI'
+                    downloadPath: '$(System.ArtifactsDirectory)'
+
+                - task: AzureRmWebAppDeployment@4
+                  inputs:
+                    ConnectionType: 'AzureRM'
+                    azureSubscription: 'EXP-QA-Terraform-DevOps'
+                    appType: 'webApp'
+                    WebAppName: 'tailspintoys-paaslab-1-site'
+                    deployToSlotOrASE: true
+                    ResourceGroupName: 'tailspintoys-paaslab-rg'
+                    SlotName: 'staging'
+                    packageForLinux: '$(build.artifactstagingdirectory)/**/*.zip'
+
+                - task: AzureAppServiceManage@0
+                  inputs:
+                    azureSubscription: 'EXP-QA-Terraform-DevOps'
+                    Action: 'Swap Slots'
+                    WebAppName: 'tailspintoys-paaslab-1-site'
+                    ResourceGroupName: 'tailspintoys-paaslab-rg'
+                    SourceSlot: 'staging'
+
+      - deployment: deployToProd
+        displayName: 'Deploy Prod Site'
+        pool:
+          vmImage: 'windows-latest'
+        dependsOn: 'deployToTest'
+        condition: succeeded()
+        environment: EXP-PaaS
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: none
+
+                - task: DownloadBuildArtifacts@0
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'TailspinToys-CI'
+                    downloadPath: '$(System.ArtifactsDirectory)'
+          
+                - task: AzureRmWebAppDeployment@4
+                  inputs:
+                    ConnectionType: 'AzureRM'
+                    azureSubscription: 'EXP-QA-Terraform-DevOps'
+                    appType: 'webApp'
+                    WebAppName: 'tailspintoys-paaslab-0-site'
+                    deployToSlotOrASE: true
+                    ResourceGroupName: 'tailspintoys-paaslab-rg'
+                    SlotName: 'staging'
+                    packageForLinux: '$(build.artifactstagingdirectory)/**/*.zip'        
+    
+                - task: AzureAppServiceManage@0
+                  inputs:
+                    azureSubscription: 'EXP-QA-Terraform-DevOps'
+                    Action: 'Swap Slots'
+                    WebAppName: 'tailspintoys-paaslab-2-site'
+                    ResourceGroupName: 'tailspintoys-paaslab-rg'
+                    SourceSlot: 'staging'

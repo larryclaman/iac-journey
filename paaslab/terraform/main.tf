@@ -7,12 +7,6 @@ provider "azurerm" {
   features {}
 }
 
-resource "random_string" "random" {
-  length  = 5
-  special = "false"
-  upper   = "false"
-}
-
 resource "random_string" "password" {
   count   = 3
   length  = 16
@@ -20,7 +14,7 @@ resource "random_string" "password" {
 }
 
 resource "azurerm_resource_group" "main" {
-  name     = "${var.siteName}-${random_string.random.id}-rg"
+  name     = "${var.siteName}-${var.workshop}-rg"
   location = "eastus"
   lifecycle {
     ignore_changes = [tags, ]
@@ -28,7 +22,7 @@ resource "azurerm_resource_group" "main" {
 }
 
 resource "azurerm_app_service_plan" "appservice" {
-  name                = "${var.siteName}-${random_string.random.id}-plan"
+  name                = "${var.siteName}-${var.workshop}-plan"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 
@@ -43,7 +37,7 @@ resource "azurerm_app_service_plan" "appservice" {
 
 resource "azurerm_app_service" "appservice" {
   count               = 3
-  name                = "${var.siteName}-${random_string.random.id}-${count.index}-site"
+  name                = "${var.siteName}-${var.workshop}-${count.index}-site"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
   app_service_plan_id = azurerm_app_service_plan.appservice.id
@@ -82,7 +76,7 @@ resource "azurerm_app_service_slot" "appservice" {
 
 resource "azurerm_postgresql_server" "postgres" {
   count               = 3
-  name                = "${var.siteName}-${random_string.random.id}-${count.index}-pgsql"
+  name                = "${var.siteName}-${var.workshop}-${count.index}-pgsql"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 
@@ -105,7 +99,7 @@ resource "azurerm_postgresql_server" "postgres" {
 
 resource "azurerm_postgresql_firewall_rule" "postgres" {
   count               = 3
-  name                = "${var.siteName}-${random_string.random.id}-${count.index}-fw"
+  name                = "${var.siteName}-${var.workshop}-${count.index}-fw"
   resource_group_name = azurerm_resource_group.main.name
   server_name         = azurerm_postgresql_server.postgres[count.index].name
   start_ip_address    = "0.0.0.0"
@@ -116,7 +110,7 @@ resource "azurerm_postgresql_firewall_rule" "postgres" {
 
 resource "azurerm_postgresql_database" "postgres" {
   count               = 3
-  name                = "${var.siteName}-${random_string.random.id}-${count.index}-db"
+  name                = "${var.siteName}-${var.workshop}-${count.index}-db"
   resource_group_name = azurerm_resource_group.main.name
   server_name         = azurerm_postgresql_server.postgres[count.index].name
   charset             = "UTF8"
