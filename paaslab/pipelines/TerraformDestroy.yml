@@ -10,8 +10,8 @@ variables:
 steps:
 - task: TerraformInstaller@0
   inputs:
-    terraformVersion: '0.12.24'
-  displayName: 'Install Terraform 0.12.24'
+    terraformVersion: '0.12.26'
+  displayName: 'Install Terraform 0.12.26'
 
 - task: CopyFiles@2
   displayName: 'Copy terraform files to working directory'
