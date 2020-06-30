@@ -147,7 +147,7 @@ stages:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'EXP-QA-Terraform-DevOps'
                     appType: 'webApp'
-                    WebAppName: 'tailspintoys-paaslab-0-site'
+                    WebAppName: 'tailspintoys-paaslab-2-site'
                     deployToSlotOrASE: true
                     ResourceGroupName: 'tailspintoys-paaslab-rg'
                     SlotName: 'staging'
