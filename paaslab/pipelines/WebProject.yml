@@ -55,6 +55,8 @@ stages:
 
       - job: testSolution
         displayName: 'Deploy TailspinToys to Dev'
+        dependsOn: 'buildSolution'
+        condition: succeeded()
         pool:
           vmImage: 'windows-latest'
         steps:
@@ -89,7 +91,7 @@ stages:
         displayName: 'Deploy Test Site'
         pool:
           vmImage: 'windows-latest'
-        environment: EXP-PaaS
+        environment: EXP-PaaS-WebApp
         strategy:
           runOnce:
             deploy:
@@ -128,7 +130,7 @@ stages:
           vmImage: 'windows-latest'
         dependsOn: 'deployToTest'
         condition: succeeded()
-        environment: EXP-PaaS
+        environment: EXP-PaaS-WebApp
         strategy:
           runOnce:
             deploy:
