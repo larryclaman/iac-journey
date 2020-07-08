@@ -38,7 +38,7 @@ stages:
               provider: 'azurerm'
               command: 'plan'
               workingDirectory: 'paaslab/terraform'
-              commandOptions: '-out $(Build.BuildId).tfplan'
+              commandOptions: '-out $(Build.BuildId).tfplan -var Queuedby="$(Build.QueuedBy)"'
               environmentServiceNameAzureRM: '${{ variables.ServiceName }}'
 
           - task: ArchiveFiles@2

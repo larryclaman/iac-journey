@@ -13,3 +13,8 @@ variable "workshop" {
   default = "paaslab"
   description = "type of workshop"
 }
+
+variable "Queuedby" {
+  description = "Who ran the deployment job?"
+  default     = "Azure DevOps"
+}

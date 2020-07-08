@@ -19,6 +19,10 @@ resource "azurerm_resource_group" "main" {
   lifecycle {
     ignore_changes = [tags, ]
   }
+tags = {
+    QueuedBy = var.Queuedby
+
+  }
 }
 
 resource "azurerm_app_service_plan" "appservice" {
