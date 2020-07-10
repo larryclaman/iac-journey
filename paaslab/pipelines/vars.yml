@@ -1,8 +1,8 @@
 # vars.yml
 variables:
-  ServiceName: 'EXP-QA-Terraform-DevOps'
+  ServiceName: 'EXP Prod (595a74d5-5d8a-421d-b364-979ba24a6489)-OneMTC-DEVOPS-IAC-JOURNEY'
   # terraform backend variables:
-  backendAzureRmResourceGroupName: 'EXP-QA-Terraform-DevOps'
-  backendAzureRmStorageAccountName: 'expqatformlabstore'
-  backendAzureRmContainerName: 'terraformstate'
-  backendAzureRmKey: 'terraform.tfstate'
+  backendAzureRmResourceGroupName: 'terraformEXPProd'
+  backendAzureRmStorageAccountName: 'expprodterraformstate'
+  backendAzureRmContainerName: 'terraform-state'
+  backendAzureRmKey: 'paaslab'

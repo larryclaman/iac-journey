@@ -21,8 +21,10 @@ resource "azurerm_resource_group" "main" {
   }
 tags = {
     QueuedBy = var.Queuedby
-
-  }
+    community = "Infrastructure"
+    Environment = "MTCDemo"
+    Owner = "MTC Infrastructure Community"
+    }
 }
 
 resource "azurerm_app_service_plan" "appservice" {
