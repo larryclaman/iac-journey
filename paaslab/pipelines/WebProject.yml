@@ -1,7 +1,14 @@
 # No trigger
 
-# All variables are set in vars.yml, so they can be used across pipelines
+# Variables are set in vars.yml, so they can be used across pipelines
 variables:
+- name: WebAppNamePrefix
+  value: 'tailspintoys-paaslab'
+- name: ResourceGroupName
+  value: 'tailspintoys-paaslab-rg'
+- name: ServiceConnection
+  value: 'EXP Prod (595a74d5-5d8a-421d-b364-979ba24a6489)-OneMTC-DEVOPS-IAC-JOURNEY' 
+
 - template: vars.yml
 
 # multi-stage pipeline - builds web artifacts first
@@ -68,20 +75,20 @@ stages:
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
-              azureSubscription: 'EXP-QA-Terraform-DevOps'
+              azureSubscription: $(ServiceConnection)
               appType: 'webApp'
-              WebAppName: 'tailspintoys-paaslab-0-site'
+              WebAppName: '$(WebAppNamePrefix)-0-site'
               deployToSlotOrASE: true
-              ResourceGroupName: 'tailspintoys-paaslab-rg'
+              ResourceGroupName: $(ResourceGroupName)
               SlotName: 'staging'
               packageForLinux: '$(build.artifactstagingdirectory)/**/*.zip'
           
           - task: AzureAppServiceManage@0
             inputs:
-              azureSubscription: 'EXP-QA-Terraform-DevOps'
+              azureSubscription: $(ServiceConnection)
               Action: 'Swap Slots'
-              WebAppName: 'tailspintoys-paaslab-0-site'
-              ResourceGroupName: 'tailspintoys-paaslab-rg'
+              WebAppName: '$(WebAppNamePrefix)-0-site'
+              ResourceGroupName: $(ResourceGroupName)
               SourceSlot: 'staging'
 
 #### Deployment Stage ####
@@ -108,20 +115,20 @@ stages:
                 - task: AzureRmWebAppDeployment@4
                   inputs:
                     ConnectionType: 'AzureRM'
-                    azureSubscription: 'EXP-QA-Terraform-DevOps'
+                    azureSubscription: $(ServiceConnection)
                     appType: 'webApp'
-                    WebAppName: 'tailspintoys-paaslab-1-site'
+                    WebAppName: '$(WebAppNamePrefix)-1-site'
                     deployToSlotOrASE: true
-                    ResourceGroupName: 'tailspintoys-paaslab-rg'
+                    ResourceGroupName: $(ResourceGroupName)
                     SlotName: 'staging'
                     packageForLinux: '$(build.artifactstagingdirectory)/**/*.zip'
 
                 - task: AzureAppServiceManage@0
                   inputs:
-                    azureSubscription: 'EXP-QA-Terraform-DevOps'
+                    azureSubscription: $(ServiceConnection)
                     Action: 'Swap Slots'
-                    WebAppName: 'tailspintoys-paaslab-1-site'
-                    ResourceGroupName: 'tailspintoys-paaslab-rg'
+                    WebAppName: '$(WebAppNamePrefix)-1-site'
+                    ResourceGroupName: $(ResourceGroupName)
                     SourceSlot: 'staging'
 
       - deployment: deployToProd
@@ -147,18 +154,18 @@ stages:
                 - task: AzureRmWebAppDeployment@4
                   inputs:
                     ConnectionType: 'AzureRM'
-                    azureSubscription: 'EXP-QA-Terraform-DevOps'
+                    azureSubscription: $(ServiceConnection)
                     appType: 'webApp'
-                    WebAppName: 'tailspintoys-paaslab-2-site'
+                    WebAppName: '$(WebAppNamePrefix)-2-site'
                     deployToSlotOrASE: true
-                    ResourceGroupName: 'tailspintoys-paaslab-rg'
+                    ResourceGroupName: $(ResourceGroupName)
                     SlotName: 'staging'
                     packageForLinux: '$(build.artifactstagingdirectory)/**/*.zip'        
     
                 - task: AzureAppServiceManage@0
                   inputs:
-                    azureSubscription: 'EXP-QA-Terraform-DevOps'
+                    azureSubscription: $(ServiceConnection)
                     Action: 'Swap Slots'
-                    WebAppName: 'tailspintoys-paaslab-2-site'
-                    ResourceGroupName: 'tailspintoys-paaslab-rg'
+                    WebAppName: '$(WebAppNamePrefix)-2-site'
+                    ResourceGroupName: $(ResourceGroupName)
                     SourceSlot: 'staging'
