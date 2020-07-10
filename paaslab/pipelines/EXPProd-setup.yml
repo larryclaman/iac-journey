@@ -1,0 +1,31 @@
+# Create RG to be used to store terraform state in EXP Prod
+# One time only pipeline
+
+
+stages:
+  - stage: Create
+    jobs:
+      - job: Create
+        displayName: 'Create resource group'  
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - checkout: self
+            fetchDepth: 1
+
+
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: 'EXP Prod (595a74d5-5d8a-421d-b364-979ba24a6489)-OneMTC-DEVOPS-IAC-JOURNEY'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                RG="terraformEXPProd"
+                LOCATION="eastUS"
+                SA="expprodterraformstate"
+                CONTAINER="terraform-state"
+                KEY="paaslab"
+                
+                az group create --name $RG --location $LOCATION
+                az storage account create -n $SA -g $RG -l $LOCATION --sku Standard_LRS
+                az storage container create -n $CONTAINER --account-name $SA --auth-mode login
