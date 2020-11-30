@@ -5,7 +5,7 @@ $RG="terraformEXP"
 $LOCATION="eastUS"
 $SA="lncexpterraformstate"
 $CONTAINER="terraform-state"
-$KEY="localdev"
+$KEY="localdev1"
 
 az resource list --query "[?resourceGroup=='$RG'].{ name: name, flavor: kind, resourceType: type, region: location }" --output table
 az group create --name $RG --location $LOCATION
