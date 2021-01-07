@@ -23,7 +23,18 @@ stages:
           - msbuild
           - visualstudio
           - vstest
+        variables:
+          DOTNET_HOST_PATH: 'dotnet.exe'  # fixes bug #1894
+          NUGET_PACKAGES: $(Pipeline.Workspace)/.nuget/packages
         steps:
+          - task: Cache@2
+            inputs:
+              key: 'nuget | "$(Agent.OS)" | **/package-lock.json,!**/bin/**'
+              restoreKeys: |
+                nuget | "$(Agent.OS)"
+              path: $(NUGET_PACKAGES)
+            displayName: Cache NuGet packages
+
           - task: NuGetToolInstaller@0
             displayName: 'Use NuGet 4.4.1'
             inputs:
