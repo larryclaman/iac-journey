@@ -1,0 +1,4 @@
+resource_group_name = tfexp-rg
+storage_account_name = tflnc02022021
+container_name = tfstate
+key = tfstatedev
