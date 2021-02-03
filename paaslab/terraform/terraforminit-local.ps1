@@ -18,3 +18,5 @@ az storage container create -n $CONTAINER --account-name $SA --auth-mode login
 "storage_account_name = `"$SA`"" |Out-file -Encoding ascii -Append -filepath  backend.tfvars
 
 terraform init -backend-config backend.tfvars -reconfigure
+
+az group create --name tailspintoys-paaslab-rg --location eastus
