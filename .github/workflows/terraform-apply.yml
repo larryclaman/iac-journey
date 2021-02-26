@@ -53,8 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       working-directory: 'paaslab/terraform'
-      backend-path: 'backenddev.data'
-
+      backend-path: 'backenddev.tfvars'
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:

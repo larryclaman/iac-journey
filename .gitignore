@@ -331,5 +331,6 @@ ASALocalRun/
 
 #Terraform
 **/*.tfstate*
-**/*.tfvars
+#**/*.tfvars
 .terraform/
+paaslab/terraform/.terraform.lock.hcl
