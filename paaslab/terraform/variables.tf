@@ -5,12 +5,12 @@ variable "environment" {
 */
 
 variable "siteName" {
-  default = "tailspintoys"
+  default     = "tailspintoys"
   description = "The name of the site"
 }
 
 variable "workshop" {
-  default = "paaslab"
+  default     = "paaslab"
   description = "type of workshop"
 }
 

@@ -20,3 +20,4 @@ az storage container create -n $CONTAINER --account-name $SA --auth-mode login
 terraform init -backend-config backend.tfvars -reconfigure
 
 az group create --name tailspintoys-paaslab-rg --location eastus
+

@@ -16,6 +16,6 @@ output "db_password3" {
 }
 */
 output "Resource_Group" {
-        value = "${var.siteName}-${var.workshop}-rg"
-        description = "Resource Group used in deployment"
+  value       = "${var.siteName}-${var.workshop}-rg"
+  description = "Resource Group used in deployment"
 }

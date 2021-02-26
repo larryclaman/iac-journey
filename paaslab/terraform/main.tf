@@ -4,11 +4,11 @@ terraform {
 
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
       version = "2.29.0"
     }
     random = {
-      source = "hashicorp/random"
+      source  = "hashicorp/random"
       version = "2.3.0"
     }
   }
@@ -35,12 +35,12 @@ resource "azurerm_resource_group" "main" {
   lifecycle {
     ignore_changes = [tags, ]
   }
-tags = {
-    QueuedBy = var.Queuedby
-    community = "Infrastructure"
+  tags = {
+    QueuedBy    = var.Queuedby
+    community   = "Infrastructure"
     Environment = "MTCDemo"
-    Owner = "MTC Infrastructure Community"
-    }
+    Owner       = "MTC Infrastructure Community"
+  }
 }
 
 resource "azurerm_app_service_plan" "appservice" {
@@ -108,7 +108,7 @@ resource "azurerm_postgresql_server" "postgres" {
   backup_retention_days        = 7
   geo_redundant_backup_enabled = false
 
-  
+
   administrator_login          = "pgsqladmin"
   administrator_login_password = random_string.password[count.index].result
   version                      = "9.6"
