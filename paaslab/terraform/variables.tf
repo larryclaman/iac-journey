@@ -21,5 +21,5 @@ variable "Queuedby" {
 
 variable "suffix" {
   description = "unique suffix"
-  default = "lnc"
+  default     = "lnc"
 }

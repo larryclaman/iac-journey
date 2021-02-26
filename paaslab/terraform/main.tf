@@ -44,8 +44,8 @@ resource "random_string" "password" {
 # }
 
 data "azurerm_resource_group" "main" {
-   name     = "${var.siteName}-${var.workshop}-rg"
- }
+  name = "${var.siteName}-${var.workshop}-rg"
+}
 
 
 
