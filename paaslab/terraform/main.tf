@@ -29,24 +29,30 @@ resource "random_string" "password" {
   special = true
 }
 
-resource "azurerm_resource_group" "main" {
-  name     = "${var.siteName}-${var.workshop}-rg"
-  location = "eastus"
-  lifecycle {
-    ignore_changes = [tags, ]
-  }
-  tags = {
-    QueuedBy    = var.Queuedby
-    community   = "Infrastructure"
-    Environment = "MTCDemo"
-    Owner       = "MTC Infrastructure Community"
-  }
-}
+# resource "azurerm_resource_group" "main" {
+#   name     = "${var.siteName}-${var.workshop}-rg"
+#   location = "eastus"
+#   lifecycle {
+#     ignore_changes = [tags, ]
+#   }
+#   tags = {
+#     QueuedBy    = var.Queuedby
+#     community   = "Infrastructure"
+#     Environment = "MTCDemo"
+#     Owner       = "MTC Infrastructure Community"
+#   }
+# }
+
+data "azurerm_resource_group" "main" {
+   name     = "${var.siteName}-${var.workshop}-rg"
+ }
+
+
 
 resource "azurerm_app_service_plan" "appservice" {
   name                = "${var.siteName}-${var.workshop}-plan"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
 
   sku {
     tier = "Standard"
@@ -60,8 +66,8 @@ resource "azurerm_app_service_plan" "appservice" {
 resource "azurerm_app_service" "appservice" {
   count               = 3
   name                = "${var.siteName}-${var.workshop}-${count.index}-site"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
   app_service_plan_id = azurerm_app_service_plan.appservice.id
 
   connection_string {
@@ -80,8 +86,8 @@ resource "azurerm_app_service_slot" "appservice" {
   count               = 3
   name                = "staging"
   app_service_name    = azurerm_app_service.appservice[count.index].name
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
   app_service_plan_id = azurerm_app_service_plan.appservice.id
 
   connection_string {
@@ -98,9 +104,9 @@ resource "azurerm_app_service_slot" "appservice" {
 
 resource "azurerm_postgresql_server" "postgres" {
   count               = 3
-  name                = "${var.siteName}-${var.workshop}-${count.index}-pgsql"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  name                = "${var.siteName}-${var.workshop}-${count.index}-pgsql${var.suffix}"
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
 
   sku_name = "GP_Gen5_2"
 
@@ -122,7 +128,7 @@ resource "azurerm_postgresql_server" "postgres" {
 resource "azurerm_postgresql_firewall_rule" "postgres" {
   count               = 3
   name                = "${var.siteName}-${var.workshop}-${count.index}-fw"
-  resource_group_name = azurerm_resource_group.main.name
+  resource_group_name = data.azurerm_resource_group.main.name
   server_name         = azurerm_postgresql_server.postgres[count.index].name
   start_ip_address    = "0.0.0.0"
   end_ip_address      = "255.255.255.255"
@@ -133,7 +139,7 @@ resource "azurerm_postgresql_firewall_rule" "postgres" {
 resource "azurerm_postgresql_database" "postgres" {
   count               = 3
   name                = "${var.siteName}-${var.workshop}-${count.index}-db"
-  resource_group_name = azurerm_resource_group.main.name
+  resource_group_name = data.azurerm_resource_group.main.name
   server_name         = azurerm_postgresql_server.postgres[count.index].name
   charset             = "UTF8"
   collation           = "English_United States.1252"

@@ -18,3 +18,8 @@ variable "Queuedby" {
   description = "Who ran the deployment job?"
   default     = "Azure DevOps"
 }
+
+variable "suffix" {
+  description = "unique suffix"
+  default = "lnc"
+}
