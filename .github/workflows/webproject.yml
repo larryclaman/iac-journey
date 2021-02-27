@@ -96,9 +96,10 @@ jobs:
       with:
         dotnet-version: '2.2.x' # SDK Version to use; x will use the latest version of the 3.1 channel
 
-
     - run: nuget restore  .\paaslab\code\tailspintoysweb.csproj
 
+    - name: dotnet build
+      run: dotnet build .\paaslab\code\tailspintoysweb.csproj -c release -o out 
 
 
 ##########################
