@@ -102,6 +102,19 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-
 
+    - uses: actions/cache@v1   # see https://github.com/actions/cache/blob/master/examples.md#c---nuget
+      name: Cache code
+      id: cachecode
+      with:
+        path: |
+          ${{ env.WORK_PATH }}/obj
+          ${{ env.WORK_PATH }}/bin
+        key: ${{ runner.os }}-code-${{ hashFiles('**/tailspintoysweb.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-code-
+
+
+
     - uses: actions/setup-node@v2
       with:
         node-version: '10'   
