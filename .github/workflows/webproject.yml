@@ -71,8 +71,10 @@ jobs:
     steps:
     # deal with npm weirdness
     - run: |
-        mkdir c:\empty -erroraction silentlycontinue
-        robocopy c:\empty "${{env.WORK_PATH}}\ClientApp\node_modules"
+        if ( test-path -path "${{env.WORK_PATH}}\ClientApp\node_modules" -PathType Container) {
+          mkdir ${{ github.workspace }}\empty -erroraction silentlycontinue
+          robocopy ${{ github.workspace }}\empty "${{env.WORK_PATH}}\ClientApp\node_modules" /purge
+        }
         #&cmd.exe /c rd /s /q "${{env.WORK_PATH}}\ClientApp\node_modules"
         #Get-ChildItem -Path "${{env.WORK_PATH}}\ClientApp\node_modules" -Recurse | Remove-Item -Force -Recurse
         # remove-item ${{env.WORK_PATH}}\ClientApp\node_modules  -force -recurse # -erroraction silentlycontinue
