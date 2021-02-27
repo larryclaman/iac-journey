@@ -70,7 +70,7 @@ jobs:
 
     steps:
     # deal with npm weirdness
-    - run: remove-item ${{env.WORK_PATH}}\ClientApp\node_modules  -force -recurse -erroraction silentlycontinue
+    - run: remove-item ${{env.WORK_PATH}}\ClientApp\node_modules  -force -recurse # -erroraction silentlycontinue
       name: Clean npm cache
 
     - name: Checkout
