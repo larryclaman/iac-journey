@@ -71,7 +71,9 @@ jobs:
     steps:
     # deal with npm weirdness
     - run: |
-        &cmd.exe /c rd /s /q "${{env.WORK_PATH}}\ClientApp\node_modules"
+        mkdir c:\empty -erroraction silentlycontinue
+        robocopy c:\empty "${{env.WORK_PATH}}\ClientApp\node_modules"
+        #&cmd.exe /c rd /s /q "${{env.WORK_PATH}}\ClientApp\node_modules"
         #Get-ChildItem -Path "${{env.WORK_PATH}}\ClientApp\node_modules" -Recurse | Remove-Item -Force -Recurse
         # remove-item ${{env.WORK_PATH}}\ClientApp\node_modules  -force -recurse # -erroraction silentlycontinue
       name: Clean npm cache
