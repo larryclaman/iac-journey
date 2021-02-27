@@ -98,9 +98,17 @@ jobs:
 
     - run: nuget restore  .\paaslab\code\tailspintoysweb.csproj
 
-    - name: dotnet build
-      run: dotnet build .\paaslab\code\tailspintoysweb.csproj -c release -o out 
+    # - name: dotnet build
+    #   run: dotnet build .\paaslab\code\tailspintoysweb.csproj -c release -o out 
 
+    - name: dotnet publish
+      run: dotnet publish .\paaslab\code\tailspintoysweb.csproj -c release -o publish
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: webproject
+        path: publish/ # or path/to/artifact
 
 ##########################
     # # Install the .NET Core workload
