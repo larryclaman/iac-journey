@@ -94,7 +94,7 @@ jobs:
 
     - run: |
         pwd
-        dir
+        get-childitem -name
     - run: nuget restore  .\passlab\code\tailspintoysweb.csproj
 
 
