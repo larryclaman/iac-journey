@@ -47,7 +47,7 @@ on:
 
 jobs:
 
-  build:
+  Build:
 
     # strategy:
     #   matrix:
@@ -65,6 +65,7 @@ jobs:
       #
       DOTNET_HOST_PATH: 'dotnet.exe'  # fixes bug #1894
       NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+      WORK_PATH: ${{ github.workspace }}/paaslab/code
 
 
     steps:
@@ -96,7 +97,7 @@ jobs:
       with:
         dotnet-version: '2.2.x' # SDK Version to use; x will use the latest version of the 3.1 channel
 
-    - run: nuget restore  .\paaslab\code\tailspintoysweb.csproj
+    - run: nuget restore  ${{env.WORK_PATH}}\tailspintoysweb.csproj
 
     # - name: dotnet build
     #   run: dotnet build .\paaslab\code\tailspintoysweb.csproj -c release -o out 
@@ -108,7 +109,18 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: webproject
-        path: publish/ # or path/to/artifact
+        path: ${{env.WORK_PATH}}/publish/ # or path/to/artifact
+
+
+  DeployToDev:
+    needs: Build
+    runs-on: windows-latest  
+
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: webproject
+      - run: dir -name 
 
 ##########################
     # # Install the .NET Core workload
