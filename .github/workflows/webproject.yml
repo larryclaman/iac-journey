@@ -73,7 +73,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
-        clean: false
+        clean: true
 
     - name: Use Nuget 4.4.1
       uses: nuget/setup-nuget@v1
