@@ -69,6 +69,10 @@ jobs:
 
 
     steps:
+    # deal with npm weirdness
+    - run: remove-item ${{WORK_PATH}}\ClientApp\node_modules  -force -recurse -erroraction silentlycontinue
+      name: Clean npm cache
+
     - name: Checkout
       uses: actions/checkout@v2
       with:
