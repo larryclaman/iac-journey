@@ -92,9 +92,11 @@ jobs:
       with:
         node-version: '10'   
 
-    - run: |
-        pwd
-        get-childitem -name
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '2.2.x' # SDK Version to use; x will use the latest version of the 3.1 channel
+
+
     - run: nuget restore  .\paaslab\code\tailspintoysweb.csproj
 
 
