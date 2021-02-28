@@ -53,8 +53,8 @@ jobs:
     #   matrix:
     #     configuration: [Debug, Release]
 
-    #runs-on: windows-latest  
-    runs-on: self-hosted
+    runs-on: windows-latest  
+    #runs-on: self-hosted
     # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
