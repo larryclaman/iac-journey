@@ -104,7 +104,8 @@ jobs:
 
 
     - run: echo "DATEKEY=$(get-date -format o)" >> $GITHUB_ENV 
-    - run: echo $GITHUB_ENV
+    - run: echo $env:GITHUB_ENV
+    - run: echo ${{env.GITHUB_ENV}}
     - run: echo ${{env.DATEKEY}}
     - uses: actions/cache@v2   # see https://github.com/actions/cache/blob/master/examples.md#c---nuget
       name: Cache code
