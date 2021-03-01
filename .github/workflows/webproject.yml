@@ -104,6 +104,7 @@ jobs:
 
 
     - run: echo "DATEKEY=$(get-date -format o)" >> $GITHUB_ENV 
+    - run: echo ${{env.DATEKEY}}
     - uses: actions/cache@v2   # see https://github.com/actions/cache/blob/master/examples.md#c---nuget
       name: Cache code
       id: cachecode
@@ -113,7 +114,7 @@ jobs:
           ${{ github.workspace }}\paaslab\code\bin
           ${{ github.workspace }}\paaslab\code\ClientApp
         #key: ${{ runner.os }}-code-${{ hashFiles('**/tailspintoysweb.csproj') }}
-        key: ${{ runner.os }}-code-${{env.DATE_KEY}}
+        key: ${{ runner.os }}-code-${{env.DATEKEY}}
         restore-keys: |
           ${{ runner.os }}-code-
 
