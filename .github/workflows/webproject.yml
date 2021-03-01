@@ -93,7 +93,7 @@ jobs:
         nuget-version: '4.4.1'
         # nuget-api-key: ${{ secrets.NuGetAPIKey }}
 
-    - uses: actions/cache@v1   # see https://github.com/actions/cache/blob/master/examples.md#c---nuget
+    - uses: actions/cache@v2   # see https://github.com/actions/cache/blob/master/examples.md#c---nuget
       name: Cache Nuget
       id: cache
       with:
@@ -104,7 +104,7 @@ jobs:
 
 
     - run: echo "DATEKEY=$(get-date -format o)" >> $GITHUB_ENV 
-    - uses: actions/cache@v1   # see https://github.com/actions/cache/blob/master/examples.md#c---nuget
+    - uses: actions/cache@v2   # see https://github.com/actions/cache/blob/master/examples.md#c---nuget
       name: Cache code
       id: cachecode
       with:
