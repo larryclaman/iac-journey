@@ -11,14 +11,13 @@ on:
 jobs:
 
   Build:
-
     # strategy:
     #   matrix:
     #     configuration: [Debug, Release]
 
     #runs-on: windows-latest  
     runs-on: self-hosted
-    # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
 
     env:
       # Solution_Name: your-solution-name                         # Replace with your solution name, i.e. MyWpfApp.sln.
@@ -101,7 +100,7 @@ jobs:
     - name: dotnet publish
       run: dotnet publish .\paaslab\code\tailspintoysweb.csproj -c release -o publish
 
-    - name: Upload artifact
+    - name: Upload webproject artifact
       uses: actions/upload-artifact@v2
       with:
         name: webproject
@@ -111,12 +110,27 @@ jobs:
   DeployToDev:
     needs: Build
     runs-on: windows-latest  
+    env:
+      AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-1-site'
+      AZURE_WEBAPP_PACKAGE_PATH: 'webproject'
+
 
     steps:
       - uses: actions/download-artifact@v2
         with:
           name: webproject
-      - run: dir -name 
+          path: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}
+      - run: dir ${{env.AZURE_WEBAPP_PACKAGE_PATH}} -name 
+
+      # Deploy to Azure Web apps
+      - name: 'Run Azure webapp deploy action using publish profile credentials'
+        uses: azure/webapps-deploy@v2
+        with: 
+          app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
+          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+
+
 
 ##########################
     # # Install the .NET Core workload
