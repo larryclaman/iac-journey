@@ -53,8 +53,8 @@ jobs:
     #   matrix:
     #     configuration: [Debug, Release]
 
-    runs-on: windows-latest  
-    #runs-on: self-hosted
+    #runs-on: windows-latest  
+    runs-on: self-hosted
     # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
@@ -102,16 +102,16 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-
 
-    - uses: actions/cache@v1   # see https://github.com/actions/cache/blob/master/examples.md#c---nuget
-      name: Cache code
-      id: cachecode
-      with:
-        path: |
-          ${{ github.workspace }}\paaslab\code\obj
-          ${{ github.workspace }}\paaslab\code\bin
-        key: ${{ runner.os }}-code-${{ hashFiles('**/tailspintoysweb.csproj') }}
-        restore-keys: |
-          ${{ runner.os }}-code-
+    # - uses: actions/cache@v1   # see https://github.com/actions/cache/blob/master/examples.md#c---nuget
+    #   name: Cache code
+    #   id: cachecode
+    #   with:
+    #     path: |
+    #       ${{ github.workspace }}\paaslab\code\obj
+    #       ${{ github.workspace }}\paaslab\code\bin
+    #     key: ${{ runner.os }}-code-${{ hashFiles('**/tailspintoysweb.csproj') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-code-
 
 
 
