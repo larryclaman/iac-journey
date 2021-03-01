@@ -102,16 +102,18 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-
 
-    # - uses: actions/cache@v1   # see https://github.com/actions/cache/blob/master/examples.md#c---nuget
-    #   name: Cache code
-    #   id: cachecode
-    #   with:
-    #     path: |
-    #       ${{ github.workspace }}\paaslab\code\obj
-    #       ${{ github.workspace }}\paaslab\code\bin
-    #     key: ${{ runner.os }}-code-${{ hashFiles('**/tailspintoysweb.csproj') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-code-
+    - uses: actions/cache@v1   # see https://github.com/actions/cache/blob/master/examples.md#c---nuget
+      name: Cache code
+      id: cachecode
+      with:
+        path: |
+          ${{ github.workspace }}\paaslab\code\obj
+          ${{ github.workspace }}\paaslab\code\bin
+          ${{ github.workspace }}\paaslab\code\ClientApp
+        #key: ${{ runner.os }}-code-${{ hashFiles('**/tailspintoysweb.csproj') }}
+        key: ${{ runner.os }}-code-
+        restore-keys: |
+          ${{ runner.os }}-code-
 
 
 
