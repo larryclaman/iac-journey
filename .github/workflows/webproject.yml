@@ -103,7 +103,7 @@ jobs:
           ${{ runner.os }}-nuget-
 
 
-    - run: echo "DATEKEY=$(get-date -format o)" >> $GITHUB_ENV 
+    - run: echo "DATEKEY=$(get-date -format o)" >> $env:GITHUB_ENV 
     - run: echo $env:GITHUB_ENV
     - run: echo ${{env.GITHUB_ENV}}
     - run: echo ${{env.DATEKEY}}
