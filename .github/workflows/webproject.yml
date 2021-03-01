@@ -130,12 +130,14 @@ jobs:
 #   "tenant": "tenant-guid"
 # }
       - name: Format Login Cred
-        id: formatlogincred
+        id: logincred
         run: |
-          $cred = '{ "appId": "${{secrets.APPID}}"
+          $cred = '{ 
+            "appId": "${{secrets.APPID}}"
             "password": "${{secrets.SPPWD}}"
+            "subscriptionId":  "${{secrets.SUBID}}"
             "tenant": "${{secrets.TENANT}}"
-          }'
+             }'
           echo "::set-output name=cred::$cred" 
 
       - name: 'Login via Azure CLI'
