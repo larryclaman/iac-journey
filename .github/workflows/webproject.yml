@@ -122,6 +122,28 @@ jobs:
           path: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}
       - run: dir ${{env.AZURE_WEBAPP_PACKAGE_PATH}} -name 
 
+# Azure login requires a cred in the form:
+# {
+#   "appId": "guid",
+#   "displayName": "name",
+#   "password": "pwd",
+#   "tenant": "tenant-guid"
+# }
+      - name: Format Login Cred
+        id: formatlogincred
+        run: |
+          $cred = '{ "appId": "${{secret.APPID}}"
+            "password": "${{secret.SPPWD}}"
+            "tenant": "${{secret.TENANT}}"
+          }'
+          echo "::set-output name=cred::$cred" 
+          
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ steps.formatlogincred.outputs.cred }}
+
+
       # Deploy to Azure Web apps
       - name: 'Run Azure webapp deploy action using publish profile credentials'
         uses: azure/webapps-deploy@v2
