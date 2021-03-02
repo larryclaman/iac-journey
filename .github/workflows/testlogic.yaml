@@ -7,12 +7,12 @@ on:
     branches: [ '*' ]
     paths:
       - paaslab/code/**
-      - .github/workflows/testlogic.yml
+      - .github/workflows/testlogic.yaml
   pull_request:
     branches: [ master ]
     paths:
       - paaslab/code/**
-      - .github/workflows/testlogic.yml
+      - .github/workflows/testlogic.yaml
 
 jobs:
 
