@@ -138,9 +138,9 @@ jobs:
             "subscriptionId":  "${{secrets.SUBID}}"
             "tenant": "${{secrets.TENANT}}"
              }'
-          echo "::set-output name=cred::$cred" 
+          echo "::set-output name=CRED::$cred" 
 
-      - run: echo ${{ steps.formatlogincred.outputs.cred }}
+      - run: echo ${{ steps.DeployToDev.formatlogincred.outputs.CRED }}
 
       - run: |
           az loin -u "${{secrets.APPID}}" -p "${{secrets.SPPWD}}" -t  "${{secrets.TENANT}}"$(Agent.OS)"
