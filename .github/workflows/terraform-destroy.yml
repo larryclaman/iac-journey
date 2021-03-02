@@ -1,0 +1,49 @@
+name: '3 - Terraform Destroy'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  Plan:
+    name: 'TerraformDestroy'
+    runs-on: ubuntu-latest
+
+    env:
+      working-directory: 'paaslab/terraform'
+      backend-path: 'backenddev.tfvars'
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory:  ${{env.working-directory}}
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner 
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform 0.13.3
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.13.3
+
+    # Initialize terraform.  Pass backend defaults in from ${{env.backend_path}} file
+    # provide SP & SP Password as env variable
+    - name: Terraform Init
+      run: |
+        terraform init \
+        -backend-config ${{env.backend-path}} 
+      env:
+        ARM_CLIENT_ID: ${{secrets.APPID}}
+        ARM_CLIENT_SECRET: ${{secrets.SPPWD}}
+        ARM_SUBSCRIPTION_ID: ${{secrets.SUBID}}
+        ARM_TENANT_ID: ${{secrets.TENANT}}
+
+    - name: Terraform Destroy
+      run: terraform destroy
+      env:
+        ARM_CLIENT_ID: ${{secrets.APPID}}
+        ARM_CLIENT_SECRET: ${{secrets.SPPWD}}
+        ARM_SUBSCRIPTION_ID: ${{secrets.SUBID}}
+        ARM_TENANT_ID: ${{secrets.TENANT}}
