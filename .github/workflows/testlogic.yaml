@@ -17,9 +17,7 @@ on:
 jobs:
 
   Build:
-    # strategy:
-    #   matrix:
-    #     configuration: [Debug, Release]
+
 
     runs-on: windows-latest  
     #runs-on: self-hosted
