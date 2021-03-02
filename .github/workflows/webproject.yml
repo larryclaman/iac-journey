@@ -204,7 +204,6 @@ jobs:
     env:
       AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-2-site'
       AZURE_WEBAPP_PACKAGE_PATH: 'webproject'
-      RG: 
 
     steps:
       - uses: actions/download-artifact@v2
