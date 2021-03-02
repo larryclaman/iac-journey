@@ -140,10 +140,11 @@ jobs:
              }'
           echo "::set-output name=CRED::$cred" 
 
-      - run: echo ${{ steps.DeployToDev.formatlogincred.outputs.CRED }}
+#      - run: echo ${{ steps.DeployToDev.formatlogincred.outputs.CRED }}
 
-      - run: |
-          az loin -u "${{secrets.APPID}}" -p "${{secrets.SPPWD}}" -t  "${{secrets.TENANT}}"$(Agent.OS)"
+      - name: az login
+        run: |
+          az login -u "${{secrets.APPID}}" -p "${{secrets.SPPWD}}" -t  "${{secrets.TENANT}}"$(Agent.OS)"
           az account set -s  "${{secrets.SUBID}}"
 
       # - name: 'Login via Azure CLI'
