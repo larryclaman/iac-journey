@@ -53,7 +53,7 @@ jobs:
 
     # Checks that all Terraform configuration files adhere to a canonical format
     # Run will abort if files fail the format check
-    - name: Terraform Format
+    - name: Terraform Format validation
       run: terraform fmt -check -diff
 
     # Generates an execution plan for Terraform

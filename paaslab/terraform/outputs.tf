@@ -21,6 +21,6 @@ output "ResourceGroupName" {
 }
 
 output "AppServiceName" {
-    value = "${var.siteName}-${var.workshop}" 
-    description = "Prefix to app service name.  Needs [0,1,2]-site appended to it."   
+  value       = "${var.siteName}-${var.workshop}"
+  description = "Prefix to app service name.  Needs [0,1,2]-site appended to it."
 }
