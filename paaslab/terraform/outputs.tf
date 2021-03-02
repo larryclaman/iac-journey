@@ -15,7 +15,12 @@ output "db_password3" {
     description = "The password for logging into the database"
 }
 */
-output "Resource_Group" {
+output "ResourceGroupName" {
   value       = "${var.siteName}-${var.workshop}-rg"
   description = "Resource Group used in deployment"
+}
+
+output "AppServiceName" {
+    value = "${var.siteName}-${var.workshop}" 
+    description = "Prefix to app service name.  Needs [0,1,2]-site appended to it."   
 }
