@@ -144,8 +144,8 @@ jobs:
 
       - name: az login
         run: |
-          az login -u "${{secrets.APPID}}" -p "${{secrets.SPPWD}}" -t  "${{secrets.TENANT}}"$(Agent.OS)"
-          az account set -s  "${{secrets.SUBID}}"
+          az login -u "${{secrets.APPID}}" -p "${{secrets.SPPWD}}" -t "${{secrets.TENANT}}"
+          az account set -s "${{secrets.SUBID}}"
 
       # - name: 'Login via Azure CLI'
       #   uses: azure/login@v1
