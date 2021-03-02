@@ -4,9 +4,15 @@ name: 2 - Build and Deploy
 on:
   workflow_dispatch:
   push:
-    branches: [ master ]
+    branches: [ '*' ]
+    paths:
+      - paaslab/code/**
+      - .github/workflows/webproject.yml
   pull_request:
     branches: [ master ]
+    paths:
+      - paaslab/code/**
+      - .github/workflows/webproject.yml
 
 jobs:
 
@@ -109,11 +115,12 @@ jobs:
 
   DeployToDev:
     needs: Build
+    # only run if this is master branch, or branch name starts with 'feature-'
+    if: (github.ref == 'refs/heads/master') || startsWith( github.ref, 'refs/heads/feature-' )
     runs-on: windows-latest  
     env:
       AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-1-site'
       AZURE_WEBAPP_PACKAGE_PATH: 'webproject'
-
 
     steps:
       - uses: actions/download-artifact@v2
@@ -129,18 +136,18 @@ jobs:
 #   "password": "pwd",
 #   "tenant": "tenant-guid"
 # }
-      - name: Format Login Cred
-        id: logincred
-        run: |
-          $cred = '{ 
-            "appId": "${{secrets.APPID}}"
-            "password": "${{secrets.SPPWD}}"
-            "subscriptionId":  "${{secrets.SUBID}}"
-            "tenant": "${{secrets.TENANT}}"
-             }'
-          echo "::set-output name=CRED::$cred" 
+      # - name: Format Login Cred
+      #   id: logincred
+      #   run: |
+      #     $cred = '{ 
+      #       "appId": "${{secrets.APPID}}"
+      #       "password": "${{secrets.SPPWD}}"
+      #       "subscriptionId":  "${{secrets.SUBID}}"
+      #       "tenant": "${{secrets.TENANT}}"
+      #        }'
+      #     echo "::set-output name=CRED::$($cred)" 
 
-#      - run: echo ${{ steps.DeployToDev.formatlogincred.outputs.CRED }}
+      # - run: echo ${{ steps.formatlogincred.outputs.CRED }}
 
       - name: az login
         run: |
@@ -150,19 +157,72 @@ jobs:
       # - name: 'Login via Azure CLI'
       #   uses: azure/login@v1
       #   with:
-      #     creds: ${{ steps.formatlogincred.outputs.cred }}
+      #     creds: ${{ steps.formatlogincred.outputs.CRED }}
 
 
       # Deploy to Azure Web apps DEV
-      - name: 'Run Azure webapp deploy action using publish profile credentials'
+      - name: 'Deploy Azure webapp to Dev'
         uses: azure/webapps-deploy@v2
         with: 
           app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
           package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
 
+  DeploytoQA:
+    if: github.ref == 'refs/heads/master'
+    needs: DeploytoDev
+    runs-on: windows-latest  
+    environment:
+      name: 'QA'
+    env:
+      AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-2-site'
+      AZURE_WEBAPP_PACKAGE_PATH: 'webproject'
 
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: webproject
+          path: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}
+      - run: dir ${{env.AZURE_WEBAPP_PACKAGE_PATH}} -name 
 
+      - name: az login
+        run: |
+          az login --service-principal -u "${{secrets.APPID}}" -p "${{secrets.SPPWD}}" -t "${{secrets.TENANT}}"
+          az account set -s "${{secrets.SUBID}}"
 
+      # Deploy to Azure Web apps QA
+      - name: 'Deploy Azure webapp to QA'
+        uses: azure/webapps-deploy@v2
+        with: 
+          app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
+          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+
+  DeploytoProd:
+    needs: DeploytoQA
+    runs-on: windows-latest  
+    environment:
+      name: 'Prod'
+    env:
+      AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-3-site'
+      AZURE_WEBAPP_PACKAGE_PATH: 'webproject'
+
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: webproject
+          path: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}
+      - run: dir ${{env.AZURE_WEBAPP_PACKAGE_PATH}} -name 
+
+      - name: az login
+        run: |
+          az login --service-principal -u "${{secrets.APPID}}" -p "${{secrets.SPPWD}}" -t "${{secrets.TENANT}}"
+          az account set -s "${{secrets.SUBID}}"
+
+      # Deploy to Azure Web apps QA
+      - name: 'Deploy Azure webapp to Prod'
+        uses: azure/webapps-deploy@v2
+        with: 
+          app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
+          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
 ##########################
     # # Install the .NET Core workload
     # - name: Install .NET Core
