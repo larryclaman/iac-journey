@@ -1,0 +1,96 @@
+
+name: TestLogic
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ '*' ]
+    paths:
+      - paaslab/code/**
+      - .github/workflows/testlogic.yml
+  pull_request:
+    branches: [ master ]
+    paths:
+      - paaslab/code/**
+      - .github/workflows/testlogic.yml
+
+jobs:
+
+  Build:
+    # strategy:
+    #   matrix:
+    #     configuration: [Debug, Release]
+
+    runs-on: windows-latest  
+    #runs-on: self-hosted
+
+
+    env:
+      # Solution_Name: your-solution-name                         # Replace with your solution name, i.e. MyWpfApp.sln.
+      # Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
+      # Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
+      # Wap_Project_Path: your-wap-project-path                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
+      #
+      DOTNET_HOST_PATH: 'dotnet.exe'  # fixes bug #1894
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+      WORK_PATH: ${{ github.workspace }}\paaslab\code
+
+
+    steps:
+    # deal with npm weirdness
+    # - run: |
+    #     if ( test-path -path "${{env.WORK_PATH}}\ClientApp\node_modules" -PathType Container) {
+    #       mkdir ${{ github.workspace }}\empty -erroraction silentlycontinue
+    #       robocopy ${{ github.workspace }}\empty "${{env.WORK_PATH}}\ClientApp\node_modules" /purge
+    #       exit 0
+    #     }
+    #     #&cmd.exe /c rd /s /q "${{env.WORK_PATH}}\ClientApp\node_modules"
+    #     #Get-ChildItem -Path "${{env.WORK_PATH}}\ClientApp\node_modules" -Recurse | Remove-Item -Force -Recurse
+    #     # remove-item ${{env.WORK_PATH}}\ClientApp\node_modules  -force -recurse # -erroraction silentlycontinue
+    #   name: Clean npm cache
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        clean: true
+
+    - run: echo "This is the first job"
+
+  DeployToDev:
+    needs: Build
+    # only run if this is master branch, or branch name starts with 'feature-'
+    if: (github.ref == 'refs/heads/master') || startsWith( github.ref, 'refs/heads/feature-' )
+    runs-on: windows-latest  
+    env:
+      AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-0-site'
+      AZURE_WEBAPP_PACKAGE_PATH: 'webproject'
+
+    steps:
+      - run: "This is the second job"
+
+
+  DeploytoQA:
+    if: github.ref == 'refs/heads/master'
+    needs: DeploytoDev
+    runs-on: windows-latest  
+    environment:
+      name: 'QA'
+    env:
+      AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-1-site'
+      AZURE_WEBAPP_PACKAGE_PATH: 'webproject'
+
+    steps:
+      - run: echo "this is the third job"
+
+  DeploytoProd:
+    needs: DeploytoQA
+    runs-on: windows-latest  
+    environment:
+      name: 'Prod'
+    env:
+      AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-2-site'
+      AZURE_WEBAPP_PACKAGE_PATH: 'webproject'
+
+    steps:
+      - run: echo "this is the last job"
