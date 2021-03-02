@@ -73,6 +73,9 @@ jobs:
     # only run if this is master branch, or branch name starts with 'feature-'
     if: (github.ref == 'refs/heads/master') || startsWith( github.ref, 'refs/heads/feature-' )
     runs-on: windows-latest  
+    environment:
+      name: 'Dev'
+      url: ${{steps.deploydev.outputs.webapp-url}}
     env:
       AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-0-site'
       AZURE_WEBAPP_PACKAGE_PATH: 'webproject'
@@ -91,6 +94,7 @@ jobs:
       # Deploy to Azure Web apps DEV
       - name: 'Deploy Azure webapp to Dev'
         uses: azure/webapps-deploy@v2
+        id: deploydev
         with: 
           app-name: ${{ env.AZURE_WEBAPP_NAME }} 
           package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
@@ -101,6 +105,7 @@ jobs:
     runs-on: windows-latest  
     environment:
       name: 'QA'
+      url: ${{steps.deployqa.outputs.webapp-url}}
     env:
       AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-1-site'
       AZURE_WEBAPP_PACKAGE_PATH: 'webproject'
@@ -120,15 +125,18 @@ jobs:
       # Deploy to Azure Web apps QA
       - name: 'Deploy Azure webapp to QA'
         uses: azure/webapps-deploy@v2
+        id: deployqa
         with: 
           app-name: ${{ env.AZURE_WEBAPP_NAME }} 
           package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+      
 
   DeploytoProd:
     needs: DeploytoQA
     runs-on: windows-latest  
     environment:
       name: 'Prod'
+      url: ${{steps.deployprod.outputs.webapp-url}}
     env:
       AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-2-site'
       AZURE_WEBAPP_PACKAGE_PATH: 'webproject'
@@ -148,6 +156,7 @@ jobs:
       # Deploy to Azure Web apps Prod
       - name: 'Deploy Azure webapp to Prod'
         uses: azure/webapps-deploy@v2
+        id: deployprod
         with: 
           app-name: ${{ env.AZURE_WEBAPP_NAME }} 
           package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
