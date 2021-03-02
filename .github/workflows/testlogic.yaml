@@ -67,7 +67,7 @@ jobs:
       AZURE_WEBAPP_PACKAGE_PATH: 'webproject'
 
     steps:
-      - run: "This is the second job"
+      - run: echo "This is the second job"
 
 
   DeploytoQA:
