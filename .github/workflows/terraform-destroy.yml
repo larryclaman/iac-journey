@@ -41,7 +41,7 @@ jobs:
         ARM_TENANT_ID: ${{secrets.TENANT}}
 
     - name: Terraform Destroy
-      run: terraform destroy -auto-approve
+      run: terraform destroy -auto-approve -lock=false
       env:
         ARM_CLIENT_ID: ${{secrets.APPID}}
         ARM_CLIENT_SECRET: ${{secrets.SPPWD}}
