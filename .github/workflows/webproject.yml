@@ -77,7 +77,7 @@ jobs:
       name: 'Dev'
       url: ${{steps.deploydev.outputs.webapp-url}}
     env:
-      AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-0-site'
+      AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-0-sitelnc'
       AZURE_WEBAPP_PACKAGE_PATH: 'webproject'
 
     steps:
@@ -107,7 +107,7 @@ jobs:
       name: 'QA'
       url: ${{steps.deployqa.outputs.webapp-url}}
     env:
-      AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-1-site'
+      AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-1-sitelnc'
       AZURE_WEBAPP_PACKAGE_PATH: 'webproject'
 
     steps:
@@ -138,7 +138,7 @@ jobs:
       name: 'Prod'
       url: ${{steps.deployprod.outputs.webapp-url}}
     env:
-      AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-2-site'
+      AZURE_WEBAPP_NAME: 'tailspintoys-paaslab-2-sitelnc'
       AZURE_WEBAPP_PACKAGE_PATH: 'webproject'
 
     steps:

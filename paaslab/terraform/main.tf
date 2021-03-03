@@ -65,7 +65,7 @@ resource "azurerm_app_service_plan" "appservice" {
 
 resource "azurerm_app_service" "appservice" {
   count               = 3
-  name                = "${var.siteName}-${var.workshop}-${count.index}-site"
+  name                = "${var.siteName}-${var.workshop}-${count.index}-site${var.suffix}"
   location            = data.azurerm_resource_group.main.location
   resource_group_name = data.azurerm_resource_group.main.name
   app_service_plan_id = azurerm_app_service_plan.appservice.id
