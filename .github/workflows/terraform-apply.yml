@@ -51,6 +51,12 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{secrets.SUBID}}
         ARM_TENANT_ID: ${{secrets.TENANT}}
 
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      timeout-minutes: 10
+
+
+
     # Checks that all Terraform configuration files adhere to a canonical format
     # Run will abort if files fail the format check
     - name: Terraform Format validation
