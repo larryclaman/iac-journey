@@ -44,16 +44,17 @@ jobs:
     - name: Terraform Init
       run: |
         terraform init \
-        -backend-config ${{env.backend-path}} 
+        -backend-config ${{env.backend-path}}
+       
       env:
         ARM_CLIENT_ID: ${{secrets.APPID}}
         ARM_CLIENT_SECRET: ${{secrets.SPPWD}}
         ARM_SUBSCRIPTION_ID: ${{secrets.SUBID}}
         ARM_TENANT_ID: ${{secrets.TENANT}}
 
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-      timeout-minutes: 10
+   # - name: Setup tmate session
+   #   uses: mxschmitt/action-tmate@v3
+   #   timeout-minutes: 10
 
 
 
@@ -64,12 +65,19 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan
+      run: terraform plan -out tfplan.out
       env:
         ARM_CLIENT_ID: ${{secrets.APPID}}
         ARM_CLIENT_SECRET: ${{secrets.SPPWD}}
         ARM_SUBSCRIPTION_ID: ${{secrets.SUBID}}
         ARM_TENANT_ID: ${{secrets.TENANT}}
+
+    - name: Encrypt tfplan file
+      run: |
+        echo $SECRET |gpg --symmetric  --batch --passphrase-fd 0  tfplan.out
+      env:
+        SECRET: ${{secrets.SPPWD}}
+
 
   Apply:
     name: 'Apply'
