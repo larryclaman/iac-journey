@@ -72,11 +72,11 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{secrets.SUBID}}
         ARM_TENANT_ID: ${{secrets.TENANT}}
 
-    - name: Encrypt tfplan file
-      run: |
-        echo $SECRET |gpg --symmetric  --batch --passphrase-fd 0  tfplan.out
-      env:
-        SECRET: ${{secrets.SPPWD}}
+#    - name: Encrypt tfplan file
+#      run: |
+#        echo $SECRET |gpg --symmetric  --batch --passphrase-fd 0  tfplan.out
+#      env:
+#        SECRET: ${{secrets.SPPWD}}
 
 
   Apply:
@@ -104,6 +104,7 @@ jobs:
       uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: 0.13.3
+
 
     # Initialize terraform.  Pass backend defaults in from ${{env.backend_path}} file
     # provide SP & SP Password as env variable
