@@ -93,7 +93,7 @@ jobs:
 
       # Deploy to Azure Web apps DEV
       - name: 'Deploy Azure webapp to Dev'
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v2.1.6
         id: deploydev
         with: 
           app-name: ${{ env.AZURE_WEBAPP_NAME }} 
@@ -124,7 +124,7 @@ jobs:
 
       # Deploy to Azure Web apps QA
       - name: 'Deploy Azure webapp to QA'
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v2.1.6
         id: deployqa
         with: 
           app-name: ${{ env.AZURE_WEBAPP_NAME }} 
@@ -155,7 +155,7 @@ jobs:
 
       # Deploy to Azure Web apps Prod
       - name: 'Deploy Azure webapp to Prod'
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v2.1.6
         id: deployprod
         with: 
           app-name: ${{ env.AZURE_WEBAPP_NAME }} 
