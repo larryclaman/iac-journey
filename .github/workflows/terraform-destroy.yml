@@ -24,7 +24,7 @@ jobs:
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform 0.13.3
-      uses: hashicorp/setup-terraform@v1
+      uses: hashicorp/setup-terraform@v1.3.2
       with:
         terraform_version: 0.13.3
 
