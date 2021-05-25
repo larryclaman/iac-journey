@@ -61,10 +61,10 @@ jobs:
     - name: dotnet publish
       run: dotnet publish ./paaslab/code/tailspintoysweb.csproj -c release -o publish
 
-    - run:  ls -l 
+    - run:  ls -l ${{env.WORK_PATH}}
 
     - name: containerize application
-      run: docker build -t myapp -f Dockerfile publish
+      run: docker build -t myapp -f Dockerfile ${{env.WORK_PATH}}/publish
 
 
 
