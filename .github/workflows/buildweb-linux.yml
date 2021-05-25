@@ -64,7 +64,7 @@ jobs:
     - run:  ls -l ${{env.WORK_PATH}}
 
     - name: containerize application
-      run: docker build -t myapp -f Dockerfile ${{env.WORK_PATH}}/publish
+      run: docker build -t myapp -f ${{env.WORK_PATH}}/Dockerfile ${{env.WORK_PATH}}/publish
 
 
 
