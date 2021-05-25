@@ -61,6 +61,8 @@ jobs:
     - name: dotnet publish
       run: dotnet publish ./paaslab/code/tailspintoysweb.csproj -c release -o publish
 
+    - run:  ls -l 
+
     - name: containerize application
       run: docker build -t myapp -f Dockerfile publish
 
