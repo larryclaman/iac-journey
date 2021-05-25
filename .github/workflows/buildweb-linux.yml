@@ -61,6 +61,11 @@ jobs:
     - name: dotnet publish
       run: dotnet publish ./paaslab/code/tailspintoysweb.csproj -c release -o publish
 
+    - name: containerize application
+      run: docker build -t myapp -f Dockerfile publish
+
+
+
     - name: Upload webproject artifact
       uses: actions/upload-artifact@v2
       with:
