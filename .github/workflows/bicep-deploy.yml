@@ -14,7 +14,7 @@ on:
       - .github/workflows/bicep-deploy.yml
 
 jobs:
-  Plan:
+  WhatIf:
     name: 'WhatIf'
     runs-on: ubuntu-latest
     environment:
