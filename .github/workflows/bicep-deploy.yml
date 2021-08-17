@@ -24,9 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
         name: 'Plan'
-    # env:
-    #   working-directory: 'paaslab/bicep'
-    #   RG: 'tailspintoys-bicep-rg'
+
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
@@ -58,9 +56,6 @@ jobs:
     needs: 'WhatIf'
     environment:
         name: 'Apply'
-    # env:
-    #   working-directory: 'paaslab/bicep'
-    #   RG: 'tailspintoys-bicep-rg'
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
@@ -79,4 +74,4 @@ jobs:
 
     - name: 'Deploy Bicep'
       run: |
-        az deployment group create -g $RG -f main.bicep
+        az deployment group create --name github-${GITHUB_RUN_ID} -g $RG -f main.bicep
