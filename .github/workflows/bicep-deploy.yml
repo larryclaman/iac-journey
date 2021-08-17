@@ -40,7 +40,6 @@ jobs:
 
     - name: 'What-If Bicep'
       run: |
-        az group create --name $RG --location $LOCATION
         az deployment group what-if -g $RG -f main.bicep
 
    # - name: Setup tmate session
