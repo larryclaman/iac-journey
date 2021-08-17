@@ -13,6 +13,11 @@ on:
       - paaslab/bicep/**
       - .github/workflows/bicep-deploy.yml
 
+env:
+  working-directory: 'paaslab/bicep'
+  RG: 'tailspintoys-bicep-rg'
+
+
 jobs:
   WhatIf:
     name: 'WhatIf'
@@ -54,8 +59,9 @@ jobs:
     needs: 'WhatIf'
     environment:
         name: 'Apply'
-    env:
-      working-directory: 'paaslab/bicep'
+    # env:
+    #   working-directory: 'paaslab/bicep'
+    #   RG: 'tailspintoys-bicep-rg'
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
