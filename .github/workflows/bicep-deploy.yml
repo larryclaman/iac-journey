@@ -1,0 +1,76 @@
+name: '1a - Bicep Deploy'
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ '*' ]
+    paths:
+      - paaslab/bicep/**
+      - .github/workflows/bicep-deploy.yml
+  pull_request:
+    branches: [ master ]
+    paths:
+      - paaslab/bicep/**
+      - .github/workflows/bicep-deploy.yml
+
+jobs:
+  Plan:
+    name: 'WhatIf'
+    runs-on: ubuntu-latest
+    environment:
+        name: 'Plan'
+    env:
+      working-directory: 'paaslab/bicep'
+      RG: 'tailspintoys-bicep-rg'
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory:  ${{env.working-directory}}
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner 
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - uses: azure/login@v1
+      with:
+        creds: '{"clientId":"${{ secrets.APPID }}","clientSecret":"${{ secrets.SPPWD }}","subscriptionId":"${{ secrets.SUBID }}","tenantId":"${{ secrets.TENANT }}"}'
+
+    - name: 'What-If Bicep'
+      run: |
+        az deployment group what-if -g $RG -f main.bicep
+
+   # - name: Setup tmate session
+   #   uses: mxschmitt/action-tmate@v3
+   #   timeout-minutes: 10
+
+
+
+  Apply:
+    name: 'Deploy'
+    runs-on: ubuntu-latest
+    needs: 'WhatIf'
+    environment:
+        name: 'Apply'
+    env:
+      working-directory: 'paaslab/bicep'
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory:  ${{env.working-directory}}
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+
+
+    - uses: azure/login@v1
+      with:
+        creds: '{"clientId":"${{ secrets.APPID }}","clientSecret":"${{ secrets.SPPWD }}","subscriptionId":"${{ secrets.SUBID }}","tenantId":"${{ secrets.TENANT }}"}'
+
+    - name: 'Deploy Bicep'
+      run: |
+        az deployment group create -g $RG -f main.bicep
