@@ -22,6 +22,7 @@ jobs:
     env:
       working-directory: 'paaslab/bicep'
       RG: 'tailspintoys-bicep-rg'
+      LOCATION: 'EastUS2'
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
@@ -39,6 +40,7 @@ jobs:
 
     - name: 'What-If Bicep'
       run: |
+        az group create --name $RG --location $LOCATION
         az deployment group what-if -g $RG -f main.bicep
 
    # - name: Setup tmate session
