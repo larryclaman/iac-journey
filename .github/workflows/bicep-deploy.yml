@@ -48,7 +48,7 @@ jobs:
       with:
         azcliversion: 2.26.0
         inlineScript: |
-          az deployment group what-if -g $RG -f main.bicep
+          az deployment group what-if -g $RG -f ${{env.working-directory}}/main.bicep
 
 
 
