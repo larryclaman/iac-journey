@@ -2,6 +2,11 @@ name: '1 - Terraform Plan & Apply'
 
 on:
   workflow_dispatch:
+    inputs:
+    PlanApply:
+      description: 'Set to 0 to only run plan; set to 1 to run plan & apply'
+      required: true
+      default: '0'
   push:
     branches: [ '*' ]
     paths:
@@ -85,6 +90,8 @@ jobs:
     needs: 'Plan'
     environment:
         name: 'Apply'
+    # Run Apply if commit was made to main branch, OR if this is a workflow_dispatch (manual) run with the PlanApply input set to 1
+    if:  (github.ref == 'refs/heads/master' && github.event_name != 'workflow_dispatch') ||  ( github.event_name == 'workflow_dispatch' && github.event.inputs.PlanApply == '1' )
     env:
       working-directory: 'paaslab/terraform'
       backend-path: 'backenddev.tfvars'
