@@ -96,6 +96,9 @@ resource "azurerm_app_service_slot" "appservice" {
     type  = "PostgreSQL"
     value = "Server=${azurerm_postgresql_server.postgres[count.index].name};User Id=${azurerm_postgresql_server.postgres[count.index].administrator_login};Password=${azurerm_postgresql_server.postgres[count.index].administrator_login_password}"
   }
+    app_settings = {
+      "WEBSITE_NODE_DEFAULT_VERSION" = "6.9.1"
+    }
 
   depends_on = [azurerm_app_service_plan.appservice]
   lifecycle {
@@ -104,9 +107,10 @@ resource "azurerm_app_service_slot" "appservice" {
 }
 
 resource "azurerm_postgresql_server" "postgres" {
-  count               = 3
-  name                = "${var.siteName}-${var.workshop}-${count.index}-pgsql${var.suffix}"
-  location            = data.azurerm_resource_group.main.location
+  count = 3
+  name  = "${var.siteName}-${var.workshop}-${count.index}-pgsql${var.suffix}"
+  // location            = data.azurerm_resource_group.main.location
+  location            = "EastUS"
   resource_group_name = data.azurerm_resource_group.main.name
 
   sku_name = "GP_Gen5_2"
@@ -122,7 +126,7 @@ resource "azurerm_postgresql_server" "postgres" {
   ssl_enforcement_enabled      = "true"
 
   lifecycle {
-    ignore_changes = [tags, ]
+    ignore_changes = [tags, threat_detection_policy ]
   }
 }
 
