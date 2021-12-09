@@ -151,3 +151,4 @@ resource "azurerm_postgresql_database" "postgres" {
 
   depends_on = [azurerm_postgresql_server.postgres]
 }
+
