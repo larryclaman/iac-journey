@@ -39,10 +39,10 @@ jobs:
       uses: actions/checkout@v2
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform 0.13.3
+    - name: Setup Terraform 1.0.11
       uses: hashicorp/setup-terraform@v1
       with:
-        terraform_version: 0.13.3
+        terraform_version: 1.0.11  #0.13.3
 
     # Initialize terraform.  Pass backend defaults in from ${{env.backend_path}} file
     # provide SP & SP Password as env variable
@@ -107,10 +107,11 @@ jobs:
       uses: actions/checkout@v2
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform 0.13.3
+    - name: Setup Terraform 1.0.11
       uses: hashicorp/setup-terraform@v1
       with:
-        terraform_version: 0.13.3
+        #terraform_version: 0.13.3
+        terraform_version: 1.0.11
 
 
     # Initialize terraform.  Pass backend defaults in from ${{env.backend_path}} file
