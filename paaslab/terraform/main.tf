@@ -96,9 +96,9 @@ resource "azurerm_app_service_slot" "appservice" {
     type  = "PostgreSQL"
     value = "Server=${azurerm_postgresql_server.postgres[count.index].name};User Id=${azurerm_postgresql_server.postgres[count.index].administrator_login};Password=${azurerm_postgresql_server.postgres[count.index].administrator_login_password}"
   }
-    app_settings = {
-      "WEBSITE_NODE_DEFAULT_VERSION" = "6.9.1"
-    }
+  app_settings = {
+    "WEBSITE_NODE_DEFAULT_VERSION" = "6.9.1"
+  }
 
   depends_on = [azurerm_app_service_plan.appservice]
   lifecycle {
@@ -126,7 +126,7 @@ resource "azurerm_postgresql_server" "postgres" {
   ssl_enforcement_enabled      = "true"
 
   lifecycle {
-    ignore_changes = [tags, threat_detection_policy ]
+    ignore_changes = [tags, threat_detection_policy]
   }
 }
 
