@@ -3,10 +3,10 @@ name: '1 - Terraform Plan & Apply'
 on:
   workflow_dispatch:
     inputs:
-    PlanApply:
-      description: 'Set to 0 to only run plan; set to 1 to run plan & apply'
-      required: true
-      default: '0'
+      PlanApply:
+        description: 'Set to 0 to only run plan; set to 1 to run plan & apply'
+        required: true
+        default: '0'
   push:
     branches: [ '*' ]
     paths:
