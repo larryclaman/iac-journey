@@ -80,9 +80,8 @@ jobs:
 
     - name: Generate annotation test
       run:  |
-        echo ${{ steps.tfplan.outputs.stdout }}
-        echo "::notice title=test number 1::hello world"
-
+        echo "${{ steps.tfplan.outputs.stdout }}"
+        
 
 
     - name: Generate annotation
