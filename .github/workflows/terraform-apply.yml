@@ -81,7 +81,7 @@ jobs:
 
 
     - name: Generate annotation
-      run:  echo "::notice Title=Terraform Plan::${{ steps.tfplan.outputs.stdout }}"
+      run:  echo "::notice title=TerraformPlan::${{ steps.tfplan.outputs.stdout }}"
 
 
 
