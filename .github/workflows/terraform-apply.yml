@@ -70,12 +70,21 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan -out tfplan.out
+      id: tfplan
+      run: |  
+        output=$(terraform plan -out tfplan.out)
+        echo "::notice Title=Terraform Plan::$output"
       env:
         ARM_CLIENT_ID: ${{secrets.APPID}}
         ARM_CLIENT_SECRET: ${{secrets.SPPWD}}
         ARM_SUBSCRIPTION_ID: ${{secrets.SUBID}}
         ARM_TENANT_ID: ${{secrets.TENANT}}
+
+
+
+
+
+
 
 #    - name: Encrypt tfplan file
 #      run: |
