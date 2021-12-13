@@ -79,7 +79,7 @@ jobs:
         ARM_TENANT_ID: ${{secrets.TENANT}}
 
     - name: Generate annotation test
-      run:  echo "::notice title=test::hello world"
+      run:  echo "::notice title=test number 1::hello world"
 
     - name: Generate annotation
       run:  echo "::notice title=TerraformPlan::${{ steps.tfplan.outputs.stdout }}"
