@@ -21,6 +21,5 @@ jobs:
     # Runs a single command using the runners shell
     - name: check perms
       run: |
-        echo "GH is $GITHUB_TOKEN"
-        echo $GITHUB_TOKEN |gh auth login --with-token
+        echo ${{ secrets.GITHUB_TOKEN }} |gh auth login --with-token
         gh  api -i 'users/{owner}'
