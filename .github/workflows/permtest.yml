@@ -20,4 +20,6 @@ jobs:
     steps:
     # Runs a single command using the runners shell
     - name: check perms
-      run: gh  api -i 'users/{owner}'
+      run: |
+        echo $GITHUB_TOKEN |gh auth login --with-token
+        gh  api -i 'users/{owner}'
