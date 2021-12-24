@@ -22,4 +22,4 @@ jobs:
     - name: check perms
       run: |
         echo ${{ secrets.GITHUB_TOKEN }} |gh auth login --with-token
-        gh  api -i 'users/{owner}'
+        gh  api -i '${{env.GITHUB_REPOSITORY}}'
