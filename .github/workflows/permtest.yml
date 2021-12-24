@@ -50,8 +50,6 @@ jobs:
             #gh run cancel $item
             set +e # 
             gh api -X POST $item
-            echo "exit code is $?"
-            #curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" $item # use curl to avoid exit code >1 triggering error
 
             let "i++"
         done
