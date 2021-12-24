@@ -24,3 +24,27 @@ jobs:
       run: |
         echo ${{ secrets.GITHUB_TOKEN }} |gh auth login --with-token
         gh  api -i '${{env.GITHUB_REPOSITORY}}'
+
+    - name: do it
+      run: |
+        # 3600 = 1hr
+        #  86400 = 1 day
+        # 864000 = 10 days
+        export OlderThan=86400
+
+        
+        # Using a two-part query so that we can leverage env variables
+        query1='.workflow_runs[]| select( .status == "waiting") | {id, created_at, run_number,cancel_url}'
+        query2='select( .created_at|fromdate < now - (env.OlderThan| tonumber)) | [ .cancel_url] |@tsv'
+        items=$(gh api "repos/{owner}/{repo}/actions/runs"  --jq "$query1" |jq -rc "$query2")
+
+        echo $items
+
+        i=0
+        for item in $items; do
+            echo "$i: Cancelling run $item"
+            #gh run cancel $item
+            gh api -X POST $item
+
+            let "i++"
+        done
