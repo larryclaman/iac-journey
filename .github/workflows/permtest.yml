@@ -48,7 +48,8 @@ jobs:
         for item in $items; do
             echo "$i: Cancelling run $item"
             #gh run cancel $item
-            gh api -X POST $item
+            # gh api -X POST $item
+            curl -X POST -H "Authorization: token $GITHUB_TOKEN" $item
 
             let "i++"
         done
