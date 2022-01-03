@@ -1,0 +1,24 @@
+name: 'Cancel Stale Runs'
+description: 'Cancels stale runs which have been waiting for approval longer than threshold time'
+inputs:
+  OlderThan:  
+    description: 'Threshold time (in minutes)'
+    required: true
+    default: '30'
+outputs:
+  count-cancelled:
+    description: "Number of runs canceled by action"
+    value: ${{ steps.findandcancel.outputs.count }}
+runs:
+  using: "composite"
+  steps:
+    - run: echo Looking for runs older than ${{ inputs.OlderThan }} minutes.
+      shell: bash
+    - id: testforprereqs
+      shell: bash
+      run: ${{ github.action_path }}/prereqcheck.sh
+    - id: findandcancel
+      shell: bash
+      run: ${{ github.action_path }}/findandcancel.sh  ${{ inputs.OlderThan }}
+ 
+

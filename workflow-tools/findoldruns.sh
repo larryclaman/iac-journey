@@ -10,8 +10,6 @@
 export OlderThan=86400
 
 # gh  api -i 'users/{owner}'   ## show scope of auth
-
-
 #query='.[] | select(.status=="waiting")| select( .createdAt |fromdate < now - (env.OlderThan| tonumber) )|[.workflowDatabaseId]|@tsv'
 #echo $query
 #items=$(gh run list --json 'databaseId,createdAt,name,status,workflowDatabaseId' | jq -rc "$query")
