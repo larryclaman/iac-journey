@@ -1,5 +1,5 @@
 #!/bin/bash
-OlderThan=${{ inputs.OlderThan }}
+OlderThan=$1
 let OlderThan=OlderThan*60 # convert to seconds
 export OlderThan
 

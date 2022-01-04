@@ -5,6 +5,9 @@ inputs:
     description: 'Threshold time (in minutes)'
     required: true
     default: '30'
+  GITHUB_TOKEN:
+    description: 'GitHub Token used for auth'
+    required: true
 outputs:
   count-cancelled:
     description: "Number of runs canceled by action"
@@ -19,6 +22,8 @@ runs:
       run: ${{ github.action_path }}/prereqcheck.sh
     - id: findandcancel
       shell: bash
-      run: ${{ github.action_path }}/findandcancel.sh  ${{ inputs.OlderThan }}
+      run: |
+        export GITHUB_TOKEN=${{ inputs.GITHUB_TOKEN }}
+        ${{ github.action_path }}/findandcancel.sh ${{ inputs.OlderThan }}
  
 

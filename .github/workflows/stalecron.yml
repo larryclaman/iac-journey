@@ -1,24 +1,26 @@
 name: Cancel stale runs
+
+env:
+  minutes: 60
 on:
   workflow_dispatch:
   schedule:
     - cron: "1,31 * * * *"
 
 jobs:
-  check:
+  checkforruns:
     runs-on: ubuntu-latest
-    env:
-      minutes: 60
     steps:
       - uses: actions/checkout@v2
-      - id: ghlogin 
-        shell: bash
-        run: echo ${{ secrets.GITHUB_TOKEN }} | gh auth login  --with-token
+      # - id: ghlogin 
+      #   shell: bash
+      #   run: echo ${{ secrets.GITHUB_TOKEN }} | gh auth login  --with-token
       - name: Run cancel action
         id: cancelstale
         uses: ./.github/actions/cancelstaleruns
         with:
-          OlderThan: 60
+          OlderThan: ${{env.minutes}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Show result count
         run: echo "Cancelled ${{ steps.cancelstale.outputs.count-cancelled }} runs"
           
