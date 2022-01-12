@@ -7,6 +7,8 @@ while getopts ":d" options; do
             ;;
         *)             # Any other option
             exit 1
+    esac
+done
 
 #OlderThan=$1
 let OlderThan=OlderThan*60 # convert to seconds
