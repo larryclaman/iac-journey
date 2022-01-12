@@ -1,5 +1,14 @@
 #!/bin/bash
-OlderThan=$1
+
+while getopts ":d" options; do
+    case "${options}" in
+        d)            # pass duration in minutes
+           OlderThan=${OPTARG} 
+            ;;
+        *)             # Any other option
+            exit 1
+
+#OlderThan=$1
 let OlderThan=OlderThan*60 # convert to seconds
 export OlderThan
 

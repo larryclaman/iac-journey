@@ -24,6 +24,6 @@ runs:
       shell: bash
       run: |
         export GITHUB_TOKEN=${{ inputs.GITHUB_TOKEN }}
-        ${{ github.action_path }}/findandcancel.sh ${{ inputs.OlderThan }}
+        ${{ github.action_path }}/findandcancel.sh -d ${{ inputs.OlderThan }}
  
 
