@@ -30,7 +30,8 @@ jobs:
           workflow: ${{ github.workflow }}
           status: 'completed'
           maximum-workflow-runs-to-keep: 12
-          
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
           
           
