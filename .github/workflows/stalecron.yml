@@ -24,15 +24,12 @@ jobs:
       - name: Show result count
         run: echo "Cancelled ${{ steps.cancelstale.outputs.count-cancelled }} runs"
       - name: Clean up my old runs
-        uses: MajorScruffy/delete-old-workflow-runs@v0.2.0
+        uses: mwigginsdev/delete-oldest-workflow-runs@v1
         with:
+          token:  ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}
-          workflow: ${{ github.workflow }}
-          status: 'completed'
-          maximum-workflow-runs-to-keep: 12
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          keep_minimum_runs: 12
+          workflow_name: ${{ github.workflow }}
           
           
 
