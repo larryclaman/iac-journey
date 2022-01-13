@@ -27,7 +27,7 @@ jobs:
         uses: MajorScruffy/delete-workflow-runs
         with:
           repository: ${{ github.repository }}
-          workflow: ${ github.workflow }}
+          workflow: ${{ github.workflow }}
           status: 'completed'
           maximum-workflow-runs-to-keep: 12
           
