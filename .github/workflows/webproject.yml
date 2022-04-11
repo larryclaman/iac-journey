@@ -62,7 +62,7 @@ jobs:
       run: dotnet publish .\paaslab\code\tailspintoysweb.csproj -c release -o publish
 
     - name: Upload webproject artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: webproject
         path: ${{env.WORK_PATH}}/publish/ 
