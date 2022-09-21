@@ -40,7 +40,7 @@ jobs:
       with:
         creds: '{"clientId":"${{ secrets.APPID }}","clientSecret":"${{ secrets.SPPWD }}","subscriptionId":"${{ secrets.SUBID }}","tenantId":"${{ secrets.TENANT }}"}'
 
-     - name: 'What-If Bicep'
+    - name: 'What-If Bicep'
        run: |
          az deployment group what-if -g $RG -f ${{env.working-directory}}/main.bicep
 
