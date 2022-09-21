@@ -42,7 +42,7 @@ jobs:
 
     - name: 'What-If Bicep'
       run: |
-         az deployment group what-if -g $RG -f ${{env.working-directory}}/main.bicep
+         az deployment group what-if -g $RG -f main.bicep
 
     # - name: 'What-If Bicep'
     #   uses: azure/CLI@v1
