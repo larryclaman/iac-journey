@@ -44,6 +44,18 @@ jobs:
       with:
         terraform_version: 1.0.11  #0.13.3
 
+
+    - run: |
+        echo $ARM_CLIENT_ID >.env
+        echo $ARM_CLIENT_SECRET >> .env
+        echo $ARM_SUBSCRIPTION_ID >>.env
+        echo $ARM_TENANT_ID>> .env
+      env:
+        ARM_CLIENT_ID: ${{secrets.APPID}}
+        ARM_CLIENT_SECRET: ${{secrets.SPPWD}}
+        ARM_SUBSCRIPTION_ID: ${{secrets.SUBID}}
+        ARM_TENANT_ID: ${{secrets.TENANT}}
+
     - name: Setup tmate session
       uses: mxschmitt/action-tmate@v3
       timeout-minutes: 10
