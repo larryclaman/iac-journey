@@ -44,6 +44,11 @@ jobs:
       with:
         terraform_version: 1.0.11  #0.13.3
 
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      timeout-minutes: 10
+
+
     # Initialize terraform.  Pass backend defaults in from ${{env.backend_path}} file
     # provide SP & SP Password as env variable
     - name: Terraform Init
@@ -57,9 +62,6 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{secrets.SUBID}}
         ARM_TENANT_ID: ${{secrets.TENANT}}
 
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-      timeout-minutes: 10
 
 
 
