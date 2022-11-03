@@ -30,23 +30,22 @@ resource "random_string" "password" {
   special = true
 }
 
-# resource "azurerm_resource_group" "main" {
-#   name     = "${var.siteName}-${var.workshop}-rg"
-#   location = "eastus"
-#   lifecycle {
-#     ignore_changes = [tags, ]
-#   }
-#   tags = {
-#     QueuedBy    = var.Queuedby
-#     community   = "Infrastructure"
-#     Environment = "MTCDemo"
-#     Owner       = "MTC Infrastructure Community"
-#   }
-# }
-
-data "azurerm_resource_group" "main" {
-  name = "${var.siteName}-${var.workshop}-rg"
+resource "azurerm_resource_group" "main" {
+  name     = "${var.siteName}-${var.workshop}-rg"
+  location = "eastus"
+  lifecycle {
+    ignore_changes = [tags, ]
+  }
+  tags = {
+    QueuedBy    = var.Queuedby
+    Environment = "MTCDemo"
+    Owner       = "Larry Claman"
+  }
 }
+
+# data "azurerm_resource_group" "main" {
+#   name = "${var.siteName}-${var.workshop}-rg"
+# }
 
 
 
