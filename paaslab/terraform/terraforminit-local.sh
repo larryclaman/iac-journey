@@ -3,7 +3,7 @@
 # change these as appropriate
 RG="terraformEXP"
 LOCATION="eastUS"
-SA="lncexpterraformstate"
+SA="lncexpterraformstatefdpo"
 CONTAINER="terraform-state"
 KEY="localdev1"
 
