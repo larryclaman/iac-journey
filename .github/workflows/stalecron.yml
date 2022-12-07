@@ -1,4 +1,4 @@
-name: Cancel stale runs
+name: Cancel stale runs and delete old runs
 
 env:
   minutes: 60
@@ -32,4 +32,13 @@ jobs:
           workflow_name: ${{ github.workflow }}
           
           
-
+  del_runs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 30
+          keep_minimum_runs: 6
