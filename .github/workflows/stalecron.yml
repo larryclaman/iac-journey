@@ -11,7 +11,7 @@ jobs:
   checkforruns:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.1.0
       # - id: ghlogin 
       #   shell: bash
       #   run: echo ${{ secrets.GITHUB_TOKEN }} | gh auth login  --with-token
