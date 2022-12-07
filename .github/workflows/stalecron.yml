@@ -5,7 +5,7 @@ env:
 on:
   workflow_dispatch:
   schedule:
-    - cron: "1,31 * * * *"
+    - cron: "31 2 * * *"
 
 jobs:
   checkforruns:
