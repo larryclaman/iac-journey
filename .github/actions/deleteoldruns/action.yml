@@ -1,0 +1,29 @@
+name: 'Delete old Runs'
+description: 'Deletes old runs which are older than threshold time'
+inputs:
+  OlderThan:  
+    description: 'Threshold time (in minutes)'
+    required: true
+    # 10080 minutes == 1 week
+    default: '10080'
+  GITHUB_TOKEN:
+    description: 'GitHub Token used for auth'
+    required: true
+outputs:
+  count-deleted:
+    description: "Number of runs deleted by action"
+    value: ${{ steps.findanddelete.outputs.count }}
+runs:
+  using: "composite"
+  steps:
+    - run: echo Looking for runs older than ${{ inputs.OlderThan }} minutes.
+      shell: bash
+    - id: testforprereqs
+      shell: bash
+      run: ${{ github.action_path }}/prereqcheck.sh
+    - id: findanddelete
+      shell: bash
+      run: |
+        export GITHUB_TOKEN=${{ inputs.GITHUB_TOKEN }}
+        ${{ github.action_path }}/findanddelete.sh -d ${{ inputs.OlderThan }}
+ 
