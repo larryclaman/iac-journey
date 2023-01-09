@@ -39,7 +39,7 @@ jobs:
         nuget-version: '4.4.1'
 
     # Cache nuget packages to speed up build
-    - uses: actions/cache@v2.1.4   # see https://github.com/actions/cache/blob/master/examples.md#c---nuget
+    - uses: actions/cache@v3.2.3   # see https://github.com/actions/cache/blob/master/examples.md#c---nuget
       name: Cache Nuget
       id: cache
       with:
